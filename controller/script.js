@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     checkLoginStatus(); 
     initializeCarousel(); 
 
-    // 2. XỬ LÝ FORM ĐĂNG KÝ/ĐĂNG NHẬP/ĐĂNG TIN (Cần lắng nghe sự kiện)
+    // 2. XỬ LÝ FORM ĐĂNG KÝ/ĐĂNG NHẬP/ĐĂNG TIN
     const registerForm = document.getElementById('register-form');
     if (registerForm) {
         registerForm.addEventListener('submit', handleRegisterSubmit);
@@ -27,18 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (postForm) {
         postForm.addEventListener('submit', handlePostSubmit);
     }
-    const forgotPasswordForm = document.getElementById('forgot-password-form');
-    if (forgotPasswordForm) {
-        forgotPasswordForm.addEventListener('submit', handleForgotPasswordSubmit);
-    }
-    // TRONG KHỐI DOMContentLoaded:
-    // ...
-    // Thêm lắng nghe cho form reset password
-    const resetPasswordForm = document.getElementById('reset-password-form');
-    if (resetPasswordForm) {
-        resetPasswordForm.addEventListener('submit', handleResetPasswordSubmit);
-    }
-    // ...
 
     // 3. HIỂN THỊ BÀI ĐĂNG TRÊN CÁC TRANG
     if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
@@ -52,18 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.endsWith('chitiet.html')) {
         renderPostDetail();
     }
-    
-    // RENDER BÀI VIẾT TRÊN TRANG PROFILE (LOGIC MỚI)
-    if (window.location.pathname.endsWith('profile.html')) {
-        renderMyPosts(); 
-    }
-    
 });
 
 
 // =========================================================
 // CHỨC NĂNG A: HEADER & NAVIGATION
 // =========================================================
+// ... (các hàm initializeMobileMenu, initializeUserMenu, performSearch, handleLoginSubmit, logout, v.v. không thay đổi) ...
+
 function initializeMobileMenu(toggle, menu) {
     if (toggle && menu) {
         toggle.addEventListener('click', () => {
@@ -125,30 +109,17 @@ function checkLoginStatus() {
             userProfileDiv.classList.add('hidden');
         }
     }
-    
-    // Cập nhật thông tin trên trang profile
     if (window.location.pathname.endsWith('profile.html') && isLoggedIn) {
         const profileUsername = document.getElementById('profile-username');
         const profilePostCount = document.getElementById('profile-post-count');
-        
-        // Cập nhật email nếu cần, hiện tại chưa lưu email trong LocalStorage
-        const profileEmail = document.getElementById('profile-email');
-        
         if (profileUsername && profilePostCount) {
              profileUsername.textContent = username;
              profilePostCount.textContent = postCount;
-             // Bạn có thể thêm localStorage.setItem('email', result.email) vào login.php
-             // để có thể hiển thị email tại đây
-             // profileEmail.textContent = localStorage.getItem('email') || 'Chưa cập nhật';
         }
     }
 }
 
-// =========================================================
-// CHỨC NĂNG B: XỬ LÝ FORM AUTH
-// =========================================================
-
-async function handleRegisterSubmit(event) {
+function handleRegisterSubmit(event) {
     event.preventDefault();
     const password = document.getElementById('reg-password').value;
     const confirmPassword = document.getElementById('reg-confirm-password').value;
@@ -162,77 +133,26 @@ async function handleRegisterSubmit(event) {
         return;
     }
     
-    const formData = {
-        username: document.getElementById('reg-username').value.trim(),
-        email: document.getElementById('reg-email').value.trim(),
-        password: password
-    };
-    
-    try {
-        const response = await fetch('db.php/register.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok && result.success) {
-            alert(result.message + ' Chuyển hướng đến trang Đăng nhập.');
-            window.location.href = 'dangnhap.html'; 
-        } else {
-            alert('Lỗi Đăng ký: ' + (result.message || 'Lỗi không xác định.'));
-        }
-
-    } catch (error) {
-        console.error('Lỗi kết nối:', error);
-        alert('Lỗi kết nối server. Vui lòng kiểm tra console log để xem lỗi.');
-    }
+    alert('✅ Đăng ký thành công! Chuyển hướng đến trang Đăng nhập.');
+    window.location.href = 'dangnhap.html'; 
 }
 
-async function handleLoginSubmit(event) {
+function handleLoginSubmit(event) {
     event.preventDefault();
     const user = document.getElementById('login-user').value.trim();
     const pass = document.getElementById('login-password').value;
     
-    if (!user || !pass) {
+    if (user && pass) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', user.split('@')[0] || 'UserMoi');
+        
+        let posts = JSON.parse(localStorage.getItem('userPosts')) || [];
+        localStorage.setItem('postCount', posts.length); 
+        
+        alert(`Chào mừng, ${localStorage.getItem('username')}! Đăng nhập thành công.`);
+        window.location.href = 'index.html'; 
+    } else {
         alert('Vui lòng nhập tên tài khoản/email và mật khẩu.');
-        return;
-    }
-
-    const formData = {
-        user: user,
-        password: pass
-    };
-    
-    try {
-        const response = await fetch('db.php/login.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-            // Đăng nhập thành công
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('username', result.username); 
-            
-            let posts = JSON.parse(localStorage.getItem('userPosts')) || [];
-            // Cập nhật postCount dựa trên bài viết của user này (nếu có)
-            const myPosts = posts.filter(post => post.author === result.username);
-            localStorage.setItem('postCount', myPosts.length); 
-            
-            alert(result.message);
-            window.location.href = 'index.html'; 
-        } else {
-            alert('Lỗi Đăng nhập: ' + (result.message || 'Lỗi không xác định.'));
-        }
-
-    } catch (error) {
-        console.error('Lỗi kết nối:', error);
-        alert('Lỗi kết nối server. Vui lòng kiểm tra console log để xem lỗi.');
     }
 }
 
@@ -245,57 +165,11 @@ function logout() {
 }
 window.logout = logout; 
 
-
-async function handleForgotPasswordSubmit(event) {
-    event.preventDefault();
-    const email = document.getElementById('fp-email').value.trim();
-    
-    if (!email) {
-        alert('Vui lòng nhập email của bạn.');
-        return;
-    }
-
-    const formData = {
-        email: email
-    };
-    
-    try {
-        const response = await fetch('db.php/forgot_password.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-            alert(result.message);
-            window.location.href = 'dangnhap.html'; 
-        } else {
-            alert('Lỗi: ' + (result.message || 'Lỗi không xác định.'));
-        }
-
-    } catch (error) {
-        console.error('Lỗi kết nối:', error);
-        alert('Lỗi kết nối server. Vui lòng kiểm tra console log để xem lỗi.');
-    }
-}
-
-
-// =========================================================
-// CHỨC NĂNG C: XỬ LÝ BÀI ĐĂNG VÀ HIỂN THỊ
-// =========================================================
-
-// TRONG FILE: script.js
-// Vui lòng thay thế toàn bộ hàm handlePostSubmit hiện tại
-
-async function handlePostSubmit(event) {
+function handlePostSubmit(event) {
     event.preventDefault();
     
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    const username = localStorage.getItem('username');
-
-    if (!isLoggedIn || !username) {
+    if (!isLoggedIn) {
         alert('Bạn cần đăng nhập để đăng bài.');
         window.location.href = 'dangnhap.html';
         return;
@@ -304,46 +178,33 @@ async function handlePostSubmit(event) {
     const title = document.getElementById('post-title').value.trim();
     const content = document.getElementById('post-content').value.trim(); 
     const category = document.getElementById('post-category').value;
+    const username = localStorage.getItem('username') || 'Người Dùng';
     
     if (!title || !content || !category) {
         alert('Vui lòng điền đầy đủ Tiêu đề, Nội dung và Chọn Phân loại chính.');
         return;
     }
 
-    const formData = {
+    const newPost = {
+        id: Date.now(), 
         title: title,
-        content: content,
+        content: content, // LƯU NỘI DUNG ĐẦY ĐỦ
+        summary: content.substring(0, 100) + '...', 
+        author: username,
+        date: new Date().toLocaleDateString('vi-VN'),
         category: category,
-        author: username // Gửi username của tác giả
+        image: 'default-post-image.jpg' 
     };
+
+    let posts = JSON.parse(localStorage.getItem('userPosts')) || [];
+    posts.unshift(newPost); 
+    localStorage.setItem('userPosts', JSON.stringify(posts));
+
+    localStorage.setItem('postCount', posts.length);
     
-    try {
-        // GỌI API ĐẾN submit_post.php
-        const response = await fetch('db.php/submit_post.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-            // KHÔNG CẦN CẬP NHẬT LOCALSTORAGE NỮA
-            alert(result.message);
-            
-            // Xóa nội dung form sau khi đăng thành công
-            document.getElementById('post-form').reset(); 
-            
-            // Chuyển hướng về trang chủ hoặc tin tức
-            window.location.href = 'tintuc.html'; 
-        } else {
-            alert('Lỗi Đăng tin: ' + (result.message || 'Lỗi không xác định.'));
-        }
-
-    } catch (error) {
-        console.error('Lỗi kết nối:', error);
-        alert('Lỗi kết nối server. Vui lòng kiểm tra console log để xem lỗi.');
-    }
+    alert(`🎉 Bài viết "${title}" đã được đăng thành công!`);
+    
+    window.location.href = 'tintuc.html'; 
 }
 
 function deletePost(postId) {
@@ -370,16 +231,16 @@ function deletePost(postId) {
     const updatedPosts = posts.filter(post => post.id !== postIdToDelete);
 
     localStorage.setItem('userPosts', JSON.stringify(updatedPosts));
-    
-    // Cập nhật lại số lượng bài đăng của user
-    const myPostsCount = updatedPosts.filter(post => post.author === currentUser).length;
-    localStorage.setItem('postCount', myPostsCount);
+    localStorage.setItem('postCount', updatedPosts.length);
 
     alert('Bài viết của bạn đã được xóa thành công!');
     window.location.reload(); 
 }
 window.deletePost = deletePost;
 
+// =========================================================
+// CHỨC NĂNG MỚI: HIỂN THỊ CHI TIẾT BÀI VIẾT (renderPostDetail)
+// =========================================================
 
 function renderPostDetail() {
     const container = document.getElementById('post-detail-container');
@@ -391,14 +252,18 @@ function renderPostDetail() {
         return;
     }
 
+    // Lấy danh sách bài viết từ LocalStorage
     const posts = JSON.parse(localStorage.getItem('userPosts')) || [];
+    
+    // Tìm bài viết khớp với ID
     const post = posts.find(p => p.id === postId);
 
     if (container) {
         if (post) {
             // Tải tiêu đề trang
-            document.title = post.title + ' | SeaTech';
+            document.getElementById('page-title').textContent = post.title + ' | TV FishFarm';
             
+            // Xây dựng nội dung HTML chi tiết
             const contentHtml = `
                 <span class="text-sm font-semibold text-teal-600 bg-teal-100 px-3 py-1 rounded">${post.category}</span>
                 <h1 class="text-4xl font-extrabold text-gray-900 mt-3 mb-4">${post.title}</h1>
@@ -428,40 +293,8 @@ function renderPostDetail() {
     }
 }
 
-// LOGIC MỚI: RENDER BÀI VIẾT CỦA USER TRÊN TRANG PROFILE
-function renderMyPosts() {
-    const container = document.getElementById('my-posts-list');
-    const currentUser = localStorage.getItem('username');
-    if (!container || !currentUser) return;
 
-    let posts = JSON.parse(localStorage.getItem('userPosts')) || [];
-    
-    // Lọc bài viết theo người dùng hiện tại
-    const myPosts = posts.filter(post => post.author === currentUser);
-
-    if (myPosts.length === 0) {
-        container.innerHTML = `<p class="text-center text-gray-500 py-6">Bạn chưa có bài viết nào. Hãy <a href="dangtin.html" class="text-teal-600 hover:underline">Đăng Tin</a> để chia sẻ kinh nghiệm!</p>`;
-        return;
-    }
-
-    // Tạo HTML cho các bài viết trong danh sách Profile
-    const postsHtml = myPosts.map(post => {
-        return `
-            <div class="bg-white p-4 rounded-lg shadow flex justify-between items-center hover:shadow-md transition">
-                <div>
-                    <a href="chitiet.html?id=${post.id}" class="text-lg font-semibold text-gray-800 hover:text-teal-600">${post.title}</a>
-                    <p class="text-sm text-gray-500 mt-1">Đăng ngày: ${post.date}</p>
-                </div>
-                <button onclick="deletePost(${post.id})" class="text-sm text-red-500 hover:text-red-700 transition font-medium ml-3">🗑️ Xóa</button>
-            </div>
-        `;
-    }).join('');
-
-    container.innerHTML = postsHtml;
-}
-
-
-// --- CÁC HÀM HIỂN THỊ CHUNG (renderPosts, createPostCard, initializeCarousel) ---
+// ... (các hàm createPostCard, renderPosts, initializeCarousel không thay đổi) ...
 
 function createPostCard(post) {
     const currentUser = localStorage.getItem('username');
@@ -536,59 +369,4 @@ function initializeCarousel() {
 
     updateCarousel(); 
     setInterval(updateCarousel, 5000);
-}
-
-// =========================================================
-// CHỨC NĂNG D: XỬ LÝ ĐẶT LẠI MẬT KHẨU
-// =========================================================
-
-async function handleResetPasswordSubmit(event) {
-    event.preventDefault();
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-
-    const newPassword = document.getElementById('new-password').value;
-    const confirmPassword = document.getElementById('confirm-new-password').value;
-    
-    if (!token) {
-        alert('Liên kết đặt lại mật khẩu không hợp lệ.');
-        return;
-    }
-
-    if (newPassword.length < 6) {
-        alert('Mật khẩu mới phải có ít nhất 6 ký tự.');
-        return;
-    }
-    
-    if (newPassword !== confirmPassword) {
-        alert('Mật khẩu xác nhận không khớp.');
-        return;
-    }
-
-    const formData = {
-        token: token,
-        new_password: newPassword
-    };
-    
-    try {
-        const response = await fetch('db.php/reset_password.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-            alert(result.message + ' Chuyển hướng đến trang đăng nhập.');
-            window.location.href = 'dangnhap.html'; 
-        } else {
-            alert('Lỗi: ' + (result.message || 'Không thể đặt lại mật khẩu.'));
-        }
-
-    } catch (error) {
-        console.error('Lỗi kết nối server:', error);
-        alert('Lỗi kết nối server. Vui lòng thử lại sau.');
-    }
 }

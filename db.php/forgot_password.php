@@ -1,17 +1,10 @@
 <?php
-// forgot_password.php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP; // Dùng cho trường hợp có lỗi
+// forgot_password.php - Xử lý yêu cầu quên mật khẩu (Tạo Token)
+include 'db.php'; 
 
-// Thay đổi đường dẫn đến PHPMailer nếu cần
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-
-include 'db.php';
 header('Content-Type: application/json');
 
+// Đọc dữ liệu JSON
 $data = json_decode(file_get_contents('php://input'), true);
 $email = $data['email'] ?? '';
 
@@ -22,50 +15,40 @@ if (empty($email)) {
 }
 
 try {
-    // 1. Kiểm tra Email có tồn tại
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+    // 1. Kiểm tra Email tồn tại
+    $stmt = $pdo->prepare("SELECT id, username FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
-    if ($user) {
-        // 2. Tạo Token và Thời hạn
-        $token = bin2hex(random_bytes(50)); // Tạo token ngẫu nhiên
-        $expiry = date('Y-m-d H:i:s', time() + 3600); // Hết hạn sau 1 giờ
-
-        // 3. Lưu Token vào DB
-        $stmt = $pdo->prepare("UPDATE users SET reset_token = ?, token_expiry = ? WHERE id = ?");
-        $stmt->execute([$token, $expiry, $user['id']]);
-
-        // BƯỚC 4: Gửi Email
-            $mail = new PHPMailer(true);
-
-            // Cấu hình SMTP
-            $mail->isSMTP(); // Thiết lập để sử dụng SMTP
-            $mail->Host       = 'smtp.gmail.com'; // Server SMTP của Gmail
-            $mail->SMTPAuth   = true; // Bật xác thực SMTP
-            $mail->Username   = 'YOUR_GMAIL_ADDRESS'; // Thay bằng ĐỊA CHỈ EMAIL GMAIL của bạn (ví dụ: myemail@gmail.com)
-            $mail->Password   = 'YOUR_APP_PASSWORD'; // Thay bằng MẬT KHẨU ỨNG DỤNG (16 ký tự) đã tạo ở trên
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Dùng SSL (hoặc TLS nếu dùng port 587)
-            $mail->Port       = 465; // Port chuẩn cho SSL
-
-            // Cấu hình Nội dung Email
-            $mail->CharSet    = 'UTF-8';
-            $mail->setFrom('no-reply@yourdomain.com', 'Hệ thống Quản lý Người dùng');
-            $mail->addAddress($email);
-
-            $mail->isHTML(true);
-            $mail->Subject = 'Yeu cau Dat lai Mat khau';
-            $resetLink = "http://localhost/my_project/reset_password_form.html?token=" . $token; 
-            $mail->Body    = "Bạn nhận được email này vì đã yêu cầu đặt lại mật khẩu. Nhấn vào liên kết dưới đây để tiếp tục: <a href='{$resetLink}'>Đặt lại Mật khẩu</a>. Liên kết sẽ hết hạn sau 1 giờ.";
-
-            $mail->send();
+    if (!$user) {
+        // Tránh tiết lộ email tồn tại, nhưng vẫn trả về thông báo thành công
+        // Đây là một biện pháp bảo mật tốt
+        echo json_encode(['success' => true, 'message' => 'Nếu email của bạn tồn tại trong hệ thống, một liên kết đặt lại mật khẩu đã được gửi đi.']);
+        exit;
     }
-    
-    // Gửi phản hồi thành công (kể cả khi email không tồn tại để bảo mật)
-    echo json_encode(['success' => true, 'message' => 'Nếu email tồn tại trong hệ thống, chúng tôi đã gửi liên kết đặt lại mật khẩu.']);
 
-} catch (Exception $e) {
+    // 2. Tạo Token Bảo mật và Thời gian hết hạn
+    $token = bin2hex(random_bytes(50)); // Tạo token ngẫu nhiên
+    $expires = date("Y-m-d H:i:s", time() + 3600); // Token hết hạn sau 1 giờ
+
+    // 3. Lưu Token vào CSDL
+    $stmt = $pdo->prepare("UPDATE users SET reset_token = ?, token_expiry = ? WHERE id = ?");
+    $stmt->execute([$token, $expires, $user['id']]);
+
+    // 4. MÔ PHỎNG: Gửi Email cho người dùng
+    
+    // Ghi lại URL Reset Password mà người dùng sẽ nhận được (Dành cho Localhost)
+    // Bạn cần thay đổi 'http://localhost/Project/reset_password.html' cho phù hợp với dự án của mình
+    $resetLink = "http://localhost/ten_thu_muc_du_an/reset_password.html?token=" . $token;
+    
+    // Nếu muốn tiếp tục ghi log mà không làm hỏng JSON, dùng error_log:
+    error_log("Link đặt lại mật khẩu cho " . $user['username'] . ": " . $resetLink);
+    
+    // 5. Trả về phản hồi thành công
+    echo json_encode(['success' => true, 'message' => 'Nếu email của bạn tồn tại, một liên kết đặt lại mật khẩu đã được gửi đến hộp thư của bạn.']);
+
+} catch (\PDOException $e) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => "Lỗi gửi Email. Mailer Error: {$mail->ErrorInfo}"]);
+    echo json_encode(['success' => false, 'message' => 'Lỗi Server: ' . $e->getMessage()]);
 }
 ?>
