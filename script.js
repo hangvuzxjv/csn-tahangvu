@@ -163,7 +163,7 @@ function checkLoginStatus() {
              // profileEmail.textContent = localStorage.getItem('email') || 'Chưa cập nhật';
         }
     }
-}
+
 
 // =========================================================
 // CHỨC NĂNG B: XỬ LÝ FORM AUTH
