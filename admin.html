@@ -6,6 +6,28 @@
     <title>🛠️ Quản Trị Hệ Thống - Duyệt Bài</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Kiểm tra ngay khi tải trang: Nếu chưa đăng nhập HOẶC không phải Admin, chuyển hướng
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const userRole = localStorage.getItem('role');
+        
+        if (!isLoggedIn) {
+             // Chuyển hướng người dùng chưa đăng nhập về trang đăng nhập
+             alert('Vui lòng đăng nhập để truy cập trang quản trị.');
+             window.location.href = 'dangnhap.html';
+        } else if (userRole !== 'admin') {
+             // Giả lập hiển thị thông báo lỗi ngay lập tức
+             document.addEventListener('DOMContentLoaded', () => {
+                 const authCheck = document.getElementById('auth-check');
+                 if (authCheck) {
+                     authCheck.classList.remove('hidden');
+                     authCheck.textContent = '❌ BẠN KHÔNG CÓ QUYỀN TRUY CẬP (Chỉ dành cho ADMIN).';
+                 }
+             });
+             // Có thể chọn chặn JS sau DOMContentLoaded để ngăn tải dữ liệu.
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .admin-tab {
             padding: 0.75rem 1.5rem;

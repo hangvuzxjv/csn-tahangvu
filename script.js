@@ -583,6 +583,7 @@ async function renderPostDetail() {
 window.deletePost = deletePost;
 
 
+
 // Hàm xóa bài viết (Sử dụng lại logic từ trang Profile)
 async function deletePost(postId) {
     const currentUser = localStorage.getItem('username');
@@ -737,6 +738,7 @@ async function renderAdminDashboard() {
 }
     window.handleApproval = handleApproval;
     window.renderAdminDashboard = renderAdminDashboard;
+
 async function handleSubmitPost(event) {
     event.preventDefault();
 
@@ -791,6 +793,50 @@ async function handleSubmitPost(event) {
     }
 }
 window.handleSubmitPost = handleSubmitPost;
+
+
+// Thêm hàm này vào script.js
+async function handleApproval(postId, action, adminNote) {
+    const adminUsername = localStorage.getItem('username'); // Lấy admin đang đăng nhập
+    if (localStorage.getItem('role') !== 'admin') {
+        alert('Chỉ admin mới có quyền thực hiện hành động này.');
+        return;
+    }
+    
+    if (!confirm(`Bạn có chắc muốn ${action === 'approve' ? 'Phê duyệt' : 'Từ chối'} bài viết ID: ${postId}?`)) {
+        return;
+    }
+
+    const formData = {
+        post_id: postId,
+        action: action, // 'approve' hoặc 'reject'
+        admin_note: adminNote,
+        admin_username: adminUsername
+    };
+    
+    try {
+        const response = await fetch('db.php/approve_post.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            alert(result.message);
+            // Tải lại bảng điều khiển để cập nhật danh sách
+            renderAdminDashboard(); 
+        } else {
+            alert('Lỗi: ' + (result.message || 'Lỗi không xác định.'));
+        }
+
+    } catch (error) {
+        console.error('Lỗi kết nối server:', error);
+        alert('Lỗi kết nối server. Vui lòng kiểm tra console log.');
+    }
+}
+window.handleApproval = handleApproval; // Đảm bảo gọi được
 // =========================================================
 // CHỨC NĂNG D: XỬ LÝ ĐẶT LẠI MẬT KHẨU
 // =========================================================

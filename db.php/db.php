@@ -1,3 +1,4 @@
+// Nội dung file db.php (Đã bỏ thẻ đóng ?>)
 <?php
 // BẬT BÁO CÁO LỖI PHP MỨC CAO
 ini_set('display_errors', 1);
@@ -28,4 +29,4 @@ try {
     echo json_encode(['success' => false, 'message' => 'LỖI KẾT NỐI SERVER/CSDL: ' . $e->getMessage()]);
     exit;
 }
-?>
+// KHÔNG CÓ THẺ ĐÓNG ?>
