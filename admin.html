@@ -13,19 +13,24 @@
             font-weight: 600;
             border-bottom: 3px solid transparent;
             transition: all 0.2s;
+            color: #6b7280; /* text-gray-500 */
         }
         .admin-tab.active {
-            border-bottom-color: #f87171; /* Màu Red-400 */
+            border-bottom-color: #ef4444; /* Màu Red-500 */
             color: #b91c1c; /* Màu Red-700 */
         }
         /* Custom CSS cho Admin Post List */
         .admin-post-item {
+            padding: 1rem;
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             border-left-width: 4px;
             border-radius: 0.5rem;
         }
-        .status-pending { border-left-color: #fcd34d; } /* Vàng */
-        .status-approved { border-left-color: #059669; } /* Xanh lá */
-        .status-rejected { border-left-color: #dc2626; } /* Đỏ */
+        /* Định nghĩa màu border cho các trạng thái */
+        .border-green-500 { border-left-color: #10b981; } 
+        .border-yellow-500 { border-left-color: #f59e0b; } 
+        .border-red-500 { border-left-color: #ef4444; } 
     </style>
 </head>
 <body class="bg-gray-100">

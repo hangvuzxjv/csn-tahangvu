@@ -1,4 +1,6 @@
-    // =========================================================
+// =========================================================
+// script.js - SCRIPT VẬN HÀNH TOÀN TRANG (FRONTEND HOÀN CHỈNH)
+// =========================================================
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. KHỞI TẠO CÁC PHẦN TỬ CHUNG
@@ -23,12 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const forgotPasswordForm = document.getElementById('forgot-password-form');
     if (forgotPasswordForm) {
         forgotPasswordForm.addEventListener('submit', handleForgotPasswordSubmit);
-}
+    }
     // Thêm lắng nghe cho form reset password
     const resetPasswordForm = document.getElementById('reset-password-form');
     if (resetPasswordForm) {
         resetPasswordForm.addEventListener('submit', handleResetPasswordSubmit);
- }
+    }
 
     // 3. HIỂN THỊ BÀI ĐĂNG TRÊN CÁC TRANG (DÙNG API MỚI)
     // FIX: Bổ sung logic kiểm tra đường dẫn linh hoạt hơn cho môi trường localhost
@@ -62,11 +64,45 @@ document.addEventListener('DOMContentLoaded', () => {
     checkLoginStatus(); 
     initializeCarousel(); 
     
-    });
+    // FIX: Gắn lại event listener cho các nút động sau khi DOMContentLoaded hoàn tất
+    if (window.location.pathname.endsWith('admin.html')) {
+        initializeAdminButtonDelegation();
+    }
+    
+});
 
-    // =========================================================
-    // CHỨC NĂNG A: HEADER & NAVIGATION
-    // =========================================================
+// THÊM HÀM MỚI ĐỂ GẮN SỰ KIỆN CHO CÁC NÚT ADMIN ĐỘNG
+function initializeAdminButtonDelegation() {
+    const mainContent = document.querySelector('main');
+    if (!mainContent) return;
+
+    mainContent.addEventListener('click', (e) => {
+        const target = e.target.closest('button'); // Tìm nút BUTTON gần nhất
+        if (!target) return;
+        
+        const action = target.getAttribute('data-action');
+        // Lấy postId từ thẻ cha chứa data-post-id (div admin-post-item hoặc div p-6)
+        const postIdContainer = target.closest('[data-post-id]'); 
+        
+        if (action && postIdContainer) {
+            const postId = postIdContainer.getAttribute('data-post-id');
+
+            if (action === 'approve' || action === 'reject') {
+                // Dùng handleApproval cho tab Pending
+                const adminNote = document.getElementById(`admin-note-${postId}`).value.trim();
+                handleApproval(postId, action, adminNote);
+            } else if (action === 'delete') {
+                // Dùng deletePost cho tab All Posts và Profile
+                deletePost(postId); 
+            }
+        }
+    });
+}
+
+
+// =========================================================
+// CHỨC NĂNG A: HEADER & NAVIGATION
+// =========================================================
 function initializeMobileMenu(toggle, menu) {
     if (toggle && menu) {
         toggle.addEventListener('click', () => {
@@ -104,8 +140,8 @@ function performSearch() {
 }
 window.performSearch = performSearch; 
 
-    //TRONG script.js, HÀM checkLoginStatus (Đã sửa)
-    function checkLoginStatus() {
+// TRONG script.js, HÀM checkLoginStatus (Đã sửa)
+function checkLoginStatus() {
     const authButtons = document.getElementById('auth-buttons');
     const userProfileDiv = document.getElementById('user-profile');
 
@@ -117,9 +153,11 @@ window.performSearch = performSearch;
     const postCount = localStorage.getItem('postCount') || 0; 
     
     // Cập nhật thông tin trên trang profile
+    // FIX: Đã thêm kiểm tra tồn tại của các phần tử HTML để tránh TypeError trên các trang khác
     if (window.location.pathname.endsWith('profile.html')) {
         const profileUsernameElement = document.getElementById('profile-username');
         const profilePostCountElement = document.getElementById('profile-post-count');
+        const profileEmailElement = document.getElementById('profile-email');
 
         if (profileUsernameElement) {
              profileUsernameElement.textContent = username; 
@@ -129,8 +167,6 @@ window.performSearch = performSearch;
              profilePostCountElement.textContent = postCount; 
         }
 
-        // Cập nhật Email thực tế (Nếu bạn đã lưu email vào localStorage trong login.php)
-        const profileEmailElement = document.getElementById('profile-email');
         const email = localStorage.getItem('email');
         if (profileEmailElement && email) {
             profileEmailElement.textContent = email; 
@@ -169,12 +205,14 @@ window.performSearch = performSearch;
             userProfileDiv.classList.add('hidden');
         }
     }
-   
-    }
     
-    // =========================================================
-    // CHỨC NĂNG B: XỬ LÝ FORM AUTH
-    // =========================================================
+    
+}
+    
+    
+// =========================================================
+// CHỨC NĂNG B: XỬ LÝ FORM AUTH
+// =========================================================
 
 async function handleRegisterSubmit(event) {
     event.preventDefault();
@@ -217,7 +255,6 @@ async function handleRegisterSubmit(event) {
         alert('Lỗi kết nối server. Vui lòng kiểm tra console log để xem lỗi.');
     }
 }
-
 
 async function handleLoginSubmit(event) {
     event.preventDefault();
@@ -344,7 +381,7 @@ function createPostCard(post) {
     // Logic nút xóa (chỉ hiển thị trên trang profile)
     const currentUser = localStorage.getItem('username');
     const deleteButtonHtml = (window.location.pathname.endsWith('profile.html') && post.status !== 'approved' && currentUser === post.author_username) ? 
-        `<button onclick="deletePost(${post.id})" class="text-xs text-red-500 hover:text-red-700 transition font-medium ml-3">🗑️ Xóa</button>` : 
+        `<button data-action="delete" data-post-id="${post.id}" class="text-xs text-red-500 hover:text-red-700 transition font-medium ml-3">🗑️ Xóa</button>` : 
         '';
         
     // Hiển thị trạng thái duyệt trên Card
@@ -408,7 +445,8 @@ async function renderMyPosts() {
     const profilePostCount = document.getElementById('profile-post-count');
     if(profilePostCount) {
          profilePostCount.textContent = myPosts.length;
-}
+    }
+
     if (myPosts.length === 0) {
         container.innerHTML = `<p class="text-center text-gray-500 py-6">Bạn chưa có bài viết nào. Hãy <a href="dangtin.html" class="text-teal-600 hover:underline">Đăng Tin</a> để chia sẻ kinh nghiệm!</p>`;
         return;
@@ -421,10 +459,11 @@ async function renderMyPosts() {
         
         // Nút xóa chỉ hiển thị nếu KHÔNG phải là bài đã duyệt
         const deleteButton = (post.status !== 'approved') ?
-            `<button onclick="deletePost(${post.id})" class="text-sm text-red-500 hover:text-red-700 transition font-medium ml-3">🗑️ Xóa</button>` : '';
+            // FIX: Sử dụng data-action và data-post-id
+            `<button data-action="delete" data-post-id="${post.id}" class="text-sm text-red-500 hover:text-red-700 transition font-medium ml-3">🗑️ Xóa</button>` : '';
 
         return `
-            <div class="bg-white p-4 rounded-lg shadow flex justify-between items-center hover:shadow-md transition">
+            <div class="bg-white p-4 rounded-lg shadow flex justify-between items-center hover:shadow-md transition" data-post-id="${post.id}">
                 <div>
                     <a href="chitiet.html?id=${post.id}" class="text-lg font-semibold text-gray-800 hover:text-teal-600">${post.title}</a>
                     <p class="text-sm text-gray-500 mt-1">Đăng ngày: ${new Date(post.created_at).toLocaleDateString('vi-VN')} | <span class="${statusClass} font-medium">${statusText}</span></p>
@@ -623,12 +662,13 @@ async function renderAllPostsForAdmin() {
         
         // Nút Xóa dành cho ADMIN (Admin có quyền xóa mọi bài)
         const adminDeleteButton = 
-            `<button onclick="deletePost(${post.id})" class="text-sm px-3 py-1 bg-red-100 text-red-600 font-semibold rounded-lg hover:bg-red-200 transition">
+            // FIX: Sử dụng data-action và data-post-id
+            `<button data-action="delete" data-post-id="${post.id}" class="text-sm px-3 py-1 bg-red-100 text-red-600 font-semibold rounded-lg hover:bg-red-200 transition">
                 🗑️ Xóa Bài
             </button>`;
 
         return `
-            <div class="admin-post-item border-l-4 ${statusBorder}">
+            <div class="admin-post-item border-l-4 ${statusBorder}" data-post-id="${post.id}">
                 <div class="flex justify-between items-start">
                     <div>
                         <a href="chitiet.html?id=${post.id}" class="text-lg font-bold text-gray-800 hover:text-red-600">${post.title}</a>
@@ -666,7 +706,7 @@ async function renderAdminDashboard() {
 
     const postsHtml = pendingPosts.map(post => {
         return `
-            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-yellow-500">
+            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-yellow-500" data-post-id="${post.id}">
                 <h3 class="text-xl font-bold text-gray-800 mb-2">${post.title}</h3>
                 <p class="text-sm text-gray-600 mb-3">Tác giả: ${post.author_username} | Phân loại: ${post.category}</p>
                 <div class="prose max-w-none text-gray-700 leading-relaxed mb-4 border p-3 rounded-lg bg-gray-50 max-h-40 overflow-y-auto">
@@ -679,10 +719,10 @@ async function renderAdminDashboard() {
                 </div>
 
                 <div class="flex justify-end space-x-3">
-                    <button onclick="handleApproval(${post.id}, 'reject')" class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
+                    <button data-action="reject" data-post-id="${post.id}" class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
                         ❌ Từ Chối
                     </button>
-                    <button onclick="handleApproval(${post.id}, 'approve')" class="px-4 py-2 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition">
+                    <button data-action="approve" data-post-id="${post.id}" class="px-4 py-2 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition">
                         ✅ Phê Duyệt
                     </button>
                 </div>
@@ -832,4 +872,4 @@ function initializeCarousel() {
     // Tự động chuyển slide mỗi 5 giây
     setInterval(nextSlide, 5000); 
 }
-    window.initializeCarousel = initializeCarousel; // Cần thiết để hàm được gọi
+window.initializeCarousel = initializeCarousel; // Cần thiết để hàm được gọi
