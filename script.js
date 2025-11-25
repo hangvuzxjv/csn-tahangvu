@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Thêm lắng nghe cho form reset password
     const resetPasswordForm = document.getElementById('reset-password-form');
     if (resetPasswordForm) {
-        handleResetPasswordSubmit(resetPasswordForm); // Nếu bạn thay đổi resetPasswordForm submit handler, hãy sửa lại đây
+        resetPasswordForm.addEventListener('submit', handleResetPasswordSubmit);// Nếu bạn thay đổi resetPasswordForm submit handler, hãy sửa lại đây
     }
     // ...
 
@@ -147,23 +147,18 @@ function checkLoginStatus() {
     
 }
     
-    // Cập nhật thông tin trên trang profile
+    // THAY THẾ KHỐI TRÊN BẰNG
     if (window.location.pathname.endsWith('profile.html') && isLoggedIn) {
-        const profileUsername = document.getElementById('profile-username');
-        const profilePostCount = document.getElementById('profile-post-count');
-        
-        // Cập nhật email nếu cần, hiện tại chưa lưu email trong LocalStorage
-        const profileEmail = document.getElementById('profile-email');
-        
-        if (profileUsername && profilePostCount) {
-             profileUsername.textContent = username;
-             profilePostCount.textContent = postCount;
-             // Bạn có thể thêm localStorage.setItem('email', result.email) vào login.php
-             // để có thể hiển thị email tại đây
-             // profileEmail.textContent = localStorage.getItem('email') || 'Chưa cập nhật';
-        }
+    const profileUsernameElement = document.getElementById('profile-username');
+    const profilePostCount = document.getElementById('profile-post-count');
+    
+    if (profileUsernameElement) {
+         profileUsernameElement.textContent = username; // Sử dụng biến đã khai báo
     }
-
+    
+    if (profilePostCount) {
+         profilePostCount.textContent = postCount; // Sử dụng biến đã khai báo
+    }
 
 // =========================================================
 // CHỨC NĂNG B: XỬ LÝ FORM AUTH
@@ -873,5 +868,37 @@ async function handleApproval(postId, action) {
         alert('Lỗi kết nối server. Vui lòng kiểm tra console log.');
     }
 }
-window.handleApproval = handleApproval;
-window.renderAdminDashboard = renderAdminDashboard;
+
+
+
+
+// Thêm khối chức năng này vào file script.js (ví dụ: ở cuối file)
+
+function initializeCarousel() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    if (slides.length === 0) return;
+    
+    let currentSlide = 0;
+    
+    // Đặt slide đầu tiên hiển thị
+    slides[currentSlide].classList.add('opacity-100');
+    slides[currentSlide].classList.remove('opacity-0');
+    
+    function nextSlide() {
+        // Ẩn slide hiện tại
+        slides[currentSlide].classList.add('opacity-0');
+        slides[currentSlide].classList.remove('opacity-100');
+        
+        // Chuyển sang slide kế tiếp
+        currentSlide = (currentSlide + 1) % slides.length;
+        
+        // Hiển thị slide mới
+        slides[currentSlide].classList.add('opacity-100');
+        slides[currentSlide].classList.remove('opacity-0');
+    }
+
+    // Tự động chuyển slide mỗi 5 giây
+    setInterval(nextSlide, 5000); 
+}
+window.initializeCarousel = initializeCarousel; // Cần thiết để hàm được gọi
+}
