@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const postForm = document.getElementById('post-form');
     if (postForm) {
-        handlePostSubmit(postForm); // Nếu bạn thay đổi postForm submit handler, hãy sửa lại đây
+        postForm.addEventListener('submit', handleSubmitPost); // Nếu bạn thay đổi postForm submit handler, hãy sửa lại đây
     }
     const forgotPasswordForm = document.getElementById('forgot-password-form');
     if (forgotPasswordForm) {
@@ -533,6 +533,51 @@ async function renderPostDetail() {
     
     container.innerHTML = contentHtml;
 }
+// Thêm hàm này vào script.js
+// ... (Dưới hàm renderMyPosts)
+
+async function deletePost(postId) {
+    const currentUser = localStorage.getItem('username');
+    const userRole = localStorage.getItem('role');
+    
+    if (!currentUser) {
+        alert('Bạn cần đăng nhập để thực hiện hành động này.');
+        return;
+    }
+    
+    if (!confirm('Bạn có chắc chắn muốn XÓA bài viết này không? Hành động này không thể hoàn tác.')) {
+        return;
+    }
+
+    const formData = {
+        post_id: postId,
+        username: currentUser,
+        role: userRole
+    };
+    
+    try {
+        const response = await fetch('db.php/delete_post.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            alert(result.message);
+            // Tải lại danh sách bài viết trên trang profile
+            renderMyPosts(); 
+        } else {
+            alert('Lỗi Xóa bài viết: ' + (result.message || 'Lỗi không xác định.'));
+        }
+
+    } catch (error) {
+        console.error('Lỗi kết nối server:', error);
+        alert('Lỗi kết nối server. Vui lòng kiểm tra console log.');
+    }
+}
+window.deletePost = deletePost;
 
 
 // --- Thêm logic cho Admin Dashboard ---
@@ -628,6 +673,58 @@ async function handleApproval(postId, action) {
 }
 window.handleApproval = handleApproval;
 window.renderAdminDashboard = renderAdminDashboard;
+
+// Thêm hàm này vào script.js
+
+async function handleSubmitPost(event) {
+    event.preventDefault();
+
+    const title = document.getElementById('post-title').value.trim();
+    const content = document.getElementById('post-content').value.trim();
+    const category = document.getElementById('post-category').value;
+    const author = localStorage.getItem('username');
+
+    if (!author) {
+        alert('Bạn cần đăng nhập để đăng bài viết. Chuyển hướng đến trang Đăng nhập.');
+        window.location.href = 'dangnhap.html';
+        return;
+    }
+
+    if (title.length < 5 || content.length < 10 || category.length === 0) {
+        alert('Vui lòng điền đủ Tiêu đề (tối thiểu 5 ký tự), Nội dung (tối thiểu 10 ký tự) và chọn Phân loại.');
+        return;
+    }
+
+    const formData = {
+        title: title,
+        content: content,
+        category: category,
+        author: author
+    };
+
+    try {
+        const response = await fetch('db.php/submit_post.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            alert(result.message);
+            // Chuyển hướng về trang profile sau khi đăng bài
+            window.location.href = 'profile.html'; 
+        } else {
+            alert('Lỗi Đăng bài: ' + (result.message || 'Lỗi không xác định.'));
+        }
+
+    } catch (error) {
+        console.error('Lỗi kết nối:', error);
+        alert('Lỗi kết nối server. Vui lòng kiểm tra console log để xem lỗi.');
+    }
+}
+window.handleSubmitPost = handleSubmitPost;
 // =========================================================
 // CHỨC NĂNG D: XỬ LÝ ĐẶT LẠI MẬT KHẨU
 // =========================================================
