@@ -13,7 +13,7 @@ $image_url = null;
 // Thư mục lưu trữ ảnh
 $target_dir = realpath(__DIR__ . '/../uploads') . '/';
 
-// --- LOGIC XỬ LÝ TỆP TIN ---
+// --- LOGIC XỬ LÝ TỆP TIN ĐÃ SỬA LỖI ---
 if (isset($_FILES['post-media']) && $_FILES['post-media']['error'] != UPLOAD_ERR_NO_FILE) {
     
     // Kiểm tra các lỗi upload cơ bản
@@ -26,21 +26,25 @@ if (isset($_FILES['post-media']) && $_FILES['post-media']['error'] != UPLOAD_ERR
         exit;
     }
 
-    // 1. Tạo tên file duy nhất
-        $new_file_name = uniqid() . time() . "." . strtolower($file_extension);
-        // Sử dụng đường dẫn tuyệt đối cho việc di chuyển tệp
-        $upload_path_absolute = realpath(__DIR__ . '/../uploads') . '/';
-    $target_file = $upload_path_absolute . $new_file_name;
-    // 2. Chỉ cho phép các định dạng ảnh phổ biến
+    // Lấy phần mở rộng file (Extension)
+    $file_extension = pathinfo($_FILES['post-media']['name'], PATHINFO_EXTENSION); 
     $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-    if (!in_array(strtolower($file_extension), $allowed_types)) {
+
+    // 1. Kiểm tra định dạng
+    if (!in_array(strtolower($file_extension), $allowed_types)) { 
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Lỗi: Chỉ cho phép tải lên file ảnh (JPG, JPEG, PNG, GIF).']);
         exit;
     }
     
+    // 2. Tạo tên file duy nhất và đường dẫn
+    $new_file_name = uniqid() . time() . "." . strtolower($file_extension);
+    // Sử dụng $target_dir đã định nghĩa ở trên (là đường dẫn tuyệt đối)
+    $target_file = $target_dir . $new_file_name; 
+    
     // 3. Thực hiện di chuyển file
     if (move_uploaded_file($_FILES['post-media']['tmp_name'], $target_file)) {
+        // Lưu đường dẫn tương đối để hiển thị trên frontend
         $image_url = "uploads/" . $new_file_name;
     } else {
         // Lỗi thường do quyền ghi (Permission Denied)
