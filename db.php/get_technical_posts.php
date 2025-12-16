@@ -1,36 +1,50 @@
 <?php
-// get_technical_posts.php - Lấy bài viết kỹ thuật với filter
+// get_technical_posts.php - Lấy bài viết kỹ thuật với filter và phân trang
 include 'db.php';
 header('Content-Type: application/json');
 
-$species = $_GET['species'] ?? '';
-$stage = $_GET['stage'] ?? '';
-$limit = $_GET['limit'] ?? 20;
+$topic = $_GET['topic'] ?? '';
+$keyword = $_GET['keyword'] ?? '';
+$page = $_GET['page'] ?? 1;
+$limit = $_GET['limit'] ?? 10;
 
 try {
+    // Base query
     $sql = "SELECT id, author_username, title, content, category, created_at, image_url 
             FROM posts 
             WHERE status = 'approved' 
-            AND category = 'kinh-nghiem'";
+            AND category IN ('kinh-nghiem', 'kythuat-nuoi')";
     
     $params = [];
     
-    // Filter theo loài
-    if (!empty($species)) {
+    // Filter theo chủ đề (tôm/cá)
+    if (!empty($topic)) {
         $sql .= " AND (title LIKE ? OR content LIKE ?)";
-        $params[] = "%$species%";
-        $params[] = "%$species%";
+        $params[] = "%$topic%";
+        $params[] = "%$topic%";
     }
     
-    // Filter theo giai đoạn
-    if (!empty($stage)) {
+    // Filter theo từ khóa
+    if (!empty($keyword)) {
         $sql .= " AND (title LIKE ? OR content LIKE ?)";
-        $params[] = "%$stage%";
-        $params[] = "%$stage%";
+        $params[] = "%$keyword%";
+        $params[] = "%$keyword%";
     }
     
-    $sql .= " ORDER BY created_at DESC LIMIT ?";
+    // Đếm tổng số bài viết
+    $countSql = str_replace("SELECT id, author_username, title, content, category, created_at, image_url", "SELECT COUNT(*)", $sql);
+    $countStmt = $pdo->prepare($countSql);
+    $countStmt->execute($params);
+    $totalPosts = $countStmt->fetchColumn();
+    
+    // Tính phân trang
+    $offset = ((int)$page - 1) * (int)$limit;
+    $totalPages = ceil($totalPosts / $limit);
+    
+    // Thêm ORDER BY, LIMIT và OFFSET
+    $sql .= " ORDER BY created_at DESC LIMIT ? OFFSET ?";
     $params[] = (int)$limit;
+    $params[] = (int)$offset;
     
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
@@ -39,7 +53,12 @@ try {
     echo json_encode([
         'success' => true,
         'posts' => $posts,
-        'count' => count($posts)
+        'pagination' => [
+            'currentPage' => (int)$page,
+            'totalPages' => (int)$totalPages,
+            'totalPosts' => (int)$totalPosts,
+            'limit' => (int)$limit
+        ]
     ]);
     
 } catch (\PDOException $e) {

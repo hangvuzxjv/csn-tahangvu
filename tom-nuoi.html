@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kỹ Thuật Nuôi Tôm Thẻ Chân Trắng - Thủy Sản Trà Vinh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="config.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="flex items-center space-x-3 hover:opacity-90 transition"><img src="img/logo.png" alt="Logo" class="h-10 w-10"><span class="text-2xl font-bold text-teal-600">Thủy Sản</span></a>
+            </div>
+
+            <nav class="hidden lg:flex space-x-8 text-base font-medium">
+                <a href="index.html" class="text-gray-700 hover:text-teal-600 transition">Trang Chủ</a>
+                <a href="tintuc.html" class="text-gray-700 hover:text-teal-600 transition">Tin Tức</a>
+                
+                <!-- Dropdown Menu cho Kỹ Thuật -->
+                <div class="relative group">
+                    <a href="kythuat-nuoi.html" class="text-teal-600 border-b-2 border-teal-600 flex items-center">
+                        Kỹ Thuật Nuôi Trồng
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </a>
+                    <!-- Dropdown content -->
+                    <div class="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                        <a href="kythuat-nuoi.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition"> Kỹ Thuật Nuôi Tôm/Cá</a>
+                        <a href="benh-thuy-san.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition"> Bệnh Thủy Sản</a>
+                        
+                        
+                        
+                    </div>
+                </div>
+                
+                <a href="dangtin.html" class="text-gray-700 hover:text-teal-600 transition">Đăng Tin</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                
+                <div class="relative hidden sm:block"><input type="text" id="search-input" placeholder="Tìm kiếm... (Enter)" onkeypress="if(event.key==='Enter') performSearch()" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm w-64 bg-white hover:border-teal-400 transition shadow-sm"></div>
+                
+    
+                <div id="auth-buttons">
+                    <a href="dangnhap.html" class="text-sm font-medium text-gray-700 hover:text-teal-600 transition">Đăng Nhập</a>
+                    <a href="dangky.html" class="ml-2 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-full hover:bg-teal-700 transition">Đăng Ký</a>
+                </div>
+
+                <div id="user-profile" class="hidden relative">
+                    <button class="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-slate-700 to-slate-800 text-white rounded-full border-2 border-teal-500 shadow-md hover:shadow-lg hover:border-teal-400 transition" id="user-menu-btn">
+                        <div class="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center"><span class="text-white text-sm font-bold">U</span></div>
+                        <span class="text-sm font-bold">user_tv</span>
+                    </button>
+                    <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                        <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"> Profile (0 bài)</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="logout()"> Đăng Xuất</a>
+                    </div>
+                </div>
+
+                 <button id="mobile-menu-toggle" class="lg:hidden text-gray-200 hover:text-teal-300 text-2xl">☰</button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden bg-white border-t border-gray-200 hidden">
+            <nav class="flex flex-col space-y-2 p-4 text-sm font-medium">
+                <a href="index.html" class="text-gray-700 hover:text-teal-600 transition">Trang Chủ</a>
+                <a href="tintuc.html" class="text-gray-700 hover:text-teal-600 transition">Tin Tức</a>
+                <a href="kythuat-nuoi.html" class="text-gray-700 hover:text-teal-600 transition">Kỹ Thuật Nuôi Trồng</a>
+                <a href="tom-nuoi.html" class="text-orange-600 font-semibold">Nuôi Tôm</a>
+                <a href="dangtin.html" class="text-gray-700 hover:text-teal-600 transition">Đăng Tin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+        <!-- Breadcrumb -->
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="index.html" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-teal-600">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        Trang Chủ
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="kythuat-nuoi.html" class="ml-1 text-sm font-medium text-gray-700 hover:text-teal-600 md:ml-2">Kỹ Thuật Nuôi</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Nuôi Tôm</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="mb-12">
+            <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl shadow-2xl overflow-hidden">
+                <div class="relative h-80">
+                    <img src="img/tom1.jpg" alt="Nuôi tôm thẻ chân trắng" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-r from-orange-900/80 to-red-900/60"></div>
+                    <div class="absolute inset-0 flex items-center justify-center text-center text-white">
+                        <div>
+                            <div class="text-6xl mb-4"></div>
+                            <h1 class="text-5xl font-bold mb-4">Kỹ Thuật Nuôi Tôm Chuyên Nghiệp</h1>
+                            <p class="text-xl opacity-90 max-w-2xl mx-auto">Hướng dẫn chi tiết quy trình nuôi tôm thẻ chân trắng, tôm sú và các loại tôm phổ biến tại Trà Vinh</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Các Loại Tôm Phổ Biến -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Các Loại Tôm Phổ Biến Tại Trà Vinh</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Tôm Thẻ Chân Trắng -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative h-48">
+                        <img src="img/tom1.jpg" alt="Tôm thẻ chân trắng" class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Phổ Biến Nhất</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3"> Tôm Thẻ Chân Trắng</h3>
+                        <p class="text-gray-600 text-sm mb-4">Loài tôm được nuôi nhiều nhất tại Trà Vinh với chu kỳ nuôi 90-120 ngày, năng suất cao.</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Chu kỳ nuôi:</span>
+                                <span class="font-semibold text-orange-600">90-120 ngày</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Năng suất:</span>
+                                <span class="font-semibold text-green-600">15-25 tấn/ha</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Giá bán:</span>
+                                <span class="font-semibold text-blue-600">180-220k/kg</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tôm Sú -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative h-48">
+                        <img src="img/banner1.jpg" alt="Tôm sú" class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Giá Trị Cao</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Tôm Sú</h3>
+                        <p class="text-gray-600 text-sm mb-4">Tôm có giá trị kinh tế cao, thích hợp nuôi trong ao đất và ao bạt với mật độ thấp.</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Chu kỳ nuôi:</span>
+                                <span class="font-semibold text-orange-600">120-150 ngày</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Năng suất:</span>
+                                <span class="font-semibold text-green-600">8-15 tấn/ha</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Giá bán:</span>
+                                <span class="font-semibold text-blue-600">300-450k/kg</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tôm Càng Xanh -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative h-48">
+                        <img src="img/29.jpg" alt="Tôm càng xanh" class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Dễ Nuôi</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3"> Tôm Càng Xanh</h3>
+                        <p class="text-gray-600 text-sm mb-4">Tôm nước ngọt dễ nuôi, thích hợp cho người mới bắt đầu, có thể nuôi quanh năm.</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Chu kỳ nuôi:</span>
+                                <span class="font-semibold text-orange-600">60-90 ngày</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Năng suất:</span>
+                                <span class="font-semibold text-green-600">5-10 tấn/ha</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Giá bán:</span>
+                                <span class="font-semibold text-blue-600">120-180k/kg</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- Quy Trình Nuôi Tôm -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Quy Trình Nuôi Tôm Chuẩn</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Bước 1-3 -->
+                <div class="space-y-6">
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">1</div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Chuẩn Bị Ao Nuôi</h3>
+                                <p class="text-gray-600 text-sm mb-3">Làm khô ao, vệ sinh đáy ao, bón vôi và phơi nắng 7-10 ngày.</p>
+                                <ul class="text-sm text-gray-500 space-y-1">
+                                    <li>• Độ sâu ao: 1.2-1.8m</li>
+                                    <li>• Bón vôi: 200-300kg/ha</li>
+                                    <li>• Lắp đặt hệ thống sục khí</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">2</div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Xử Lý Nước</h3>
+                                <p class="text-gray-600 text-sm mb-3">Bơm nước vào ao, xử lý nước và tạo môi trường phù hợp.</p>
+                                <ul class="text-sm text-gray-500 space-y-1">
+                                    <li>• Độ mặn: 15-25‰ (tôm sú), 0-15‰ (tôm thẻ)</li>
+                                    <li>• pH: 7.5-8.5</li>
+                                    <li>• Nhiệt độ: 26-30°C</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">3</div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Thả Giống</h3>
+                                <p class="text-gray-600 text-sm mb-3">Chọn con giống khỏe mạnh, thả vào ao với mật độ phù hợp.</p>
+                                <ul class="text-sm text-gray-500 space-y-1">
+                                    <li>• Mật độ: 15-25 con/m² (tôm thẻ)</li>
+                                    <li>• Kích thước: PL12-PL15</li>
+                                    <li>• Thả vào buổi sáng sớm hoặc chiều mát</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <!-- Bước 4-6 -->
+                <div class="space-y-6">
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">4</div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Cho Ăn & Quản Lý</h3>
+                                <p class="text-gray-600 text-sm mb-3">Cho ăn đúng liều lượng, theo dõi tăng trưởng và sức khỏe tôm.</p>
+                                <ul class="text-sm text-gray-500 space-y-1">
+                                    <li>• Cho ăn 3-4 lần/ngày</li>
+                                    <li>• Lượng thức ăn: 3-5% trọng lượng tôm</li>
+                                    <li>• Kiểm tra sức khỏe hàng ngày</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">5</div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Phòng Bệnh</h3>
+                                <p class="text-gray-600 text-sm mb-3">Theo dõi chất lượng nước, phòng ngừa bệnh và xử lý kịp thời.</p>
+                                <ul class="text-sm text-gray-500 space-y-1">
+                                    <li>• Kiểm tra chất lượng nước 2 lần/ngày</li>
+                                    <li>• Sử dụng men vi sinh</li>
+                                    <li>• Phát hiện sớm dấu hiệu bệnh</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-teal-500">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-teal-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">6</div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Thu Hoạch</h3>
+                                <p class="text-gray-600 text-sm mb-3">Thu hoạch đúng thời điểm để đạt năng suất và chất lượng cao nhất.</p>
+                                <ul class="text-sm text-gray-500 space-y-1">
+                                    <li>• Kích thước: 20-30 con/kg</li>
+                                    <li>• Thu hoạch vào buổi sáng sớm</li>
+                                    <li>• Bảo quản lạnh ngay sau thu hoạch</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- Liên Kết Nhanh -->
+        <section class="mb-12">
+            <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Xem Thêm Kỹ Thuật Nuôi Khác</h2>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="ca-nuoi.html" class="bg-gradient-to-r from-blue-500 to-teal-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                         Kỹ Thuật Nuôi Cá
+                    </a>
+                    <a href="kythuat-nuoi.html" class="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                         Tất Cả Kỹ Thuật
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips & Lưu Ý -->
+        <section class="mb-12">
+            <div class="bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center"> Tips & Lưu Ý Quan Trọng</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div class="bg-white rounded-lg p-6 shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <span class="text-2xl mr-2">⚠️</span>
+                            Những Điều Cần Tránh
+                        </h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>• Không thả giống khi thời tiết xấu</li>
+                            <li>• Tránh cho ăn quá nhiều gây ô nhiễm nước</li>
+                            <li>• Không sử dụng thuốc kháng sinh tùy tiện</li>
+                            <li>• Tránh thay đổi nước đột ngột</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-6 shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <span class="text-2xl mr-2">✅</span>
+                            Bí Quyết Thành Công
+                        </h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>• Kiểm tra chất lượng nước thường xuyên</li>
+                            <li>• Sử dụng thức ăn chất lượng cao</li>
+                            <li>• Duy trì hệ thống sục khí 24/7</li>
+                            <li>• Ghi chép nhật ký nuôi chi tiết</li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gradient-to-r from-slate-800 to-slate-900 text-white mt-12 pt-10 pb-6">
+        <div class="container mx-auto px-4">
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-slate-700 pb-8">
+                
+                <div>
+                    <a href="index.html" class="flex items-center space-x-2"><img src="img/logo.png" alt="Logo" class="h-8 w-8"><span class="text-2xl font-bold text-teal-400">Thủy Sản</span></a>
+                    <p class="text-sm text-white mt-4 leading-relaxed">
+                        Cổng thông tin kỹ thuật nuôi trồng thủy sản tập trung vào kinh nghiệm và tài liệu dành cho người nuôi tại tỉnh Trà Vinh.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-white hover:text-teal-400 transition">📘</a> <a href="#" class="text-white hover:text-teal-400 transition">📺</a> <a href="#" class="text-white hover:text-teal-400 transition">📧</a> </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4 border-b border-teal-500 pb-1">Điều Hướng</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="text-white hover:text-white transition">Trang Chủ</a></li>
+                        <li><a href="tintuc.html" class="text-white hover:text-white transition">Tin Tức Cộng Đồng</a></li>
+                        <li><a href="kythuat-nuoi.html" class="text-white hover:text-white transition">Kỹ Thuật Nuôi Trồng</a></li>
+                        <li><a href="dangtin.html" class="text-white hover:text-white transition">Đăng Bài/Chia Sẻ</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4 border-b border-teal-500 pb-1">Tra Cứu Nhanh</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="kythuat-nuoi.html" class="text-white hover:text-white transition">Kỹ Thuật Nuôi Tôm/Cá</a></li>
+                        <li><a href="benh-thuy-san.html" class="text-white hover:text-white transition">Phác Đồ Bệnh Thủy Sản</a></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4 border-b border-teal-500 pb-1">Liên Hệ</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><span class="text-white">Địa chỉ:</span> <span class="text-white">Trà Vinh, Việt Nam</span></li>
+                        <li><span class="text-white">Email:</span> <a href="mailto:info@tvfishfarm.com" class="text-teal-400 hover:underline">info@tvfishfarm.com</a></li>
+                        <li><span class="text-white">Điện thoại:</span> <span class="text-white">(+84) 9xxyyyyzzz</span></li>
+                    </ul>
+                </div>
+
+            </div>
+            
+            <div class="mt-6 text-center text-sm text-gray-400">
+                &copy; 2025 Kỹ Thuật Nuôi Trồng Thủy Sản Trà Vinh. Được phát triển tại <span class="text-teal-400">Trà Vinh</span>.
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

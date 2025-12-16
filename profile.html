@@ -19,7 +19,25 @@
             <nav class="hidden lg:flex space-x-8 text-base font-medium">
                 <a href="index.html" class="text-gray-700 hover:text-teal-600 transition">Trang Chủ</a>
                 <a href="tintuc.html" class="text-gray-700 hover:text-teal-600 transition">Tin Tức</a>
-                <a href="kythuat.html" class="text-gray-700 hover:text-teal-600 transition">Thông tin/Kỹ Thuật Nuôi Trồng</a>
+                
+                <!-- Dropdown Menu cho Kỹ Thuật -->
+                <div class="relative group">
+                    <a href="kythuat-nuoi.html" class="text-gray-700 hover:text-teal-600 transition flex items-center">
+                        Thông tin/Kỹ Thuật Nuôi Trồng
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </a>
+                    <!-- Dropdown content -->
+                    <div class="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                        <a href="kythuat-nuoi.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition"> Kỹ Thuật Nuôi Tôm/Cá</a>
+                        <a href="benh-thuy-san.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition">  Bệnh Thủy Sản</a>
+                        
+                        
+                        
+                    </div>
+                </div>
+                
                 <a href="dangtin.html" class="text-gray-700 hover:text-teal-600 transition">Đăng Tin</a>
             </nav>
 
@@ -50,7 +68,7 @@
             <nav class="flex flex-col space-y-2 p-4 text-sm font-medium">
                 <a href="index.html" class="text-gray-700 hover:text-teal-600 transition">Trang Chủ</a>
                 <a href="tintuc.html" class="text-gray-700 hover:text-teal-600 transition">Tin Tức</a>
-                <a href="kythuat.html" class="text-gray-700 hover:text-teal-600 transition">Thông tin/Kỹ Thuật Nuôi Trồng</a>
+                <a href="kythuat-nuoi.html" class="text-gray-700 hover:text-teal-600 transition">Kỹ Thuật Nuôi Trồng</a>
             </nav>
         </div>
     </header>
@@ -94,7 +112,12 @@
                 
                 <div id="my-posts-list" class="space-y-4">
                     
+                </div>
                 
+                <!-- Phân trang cho profile -->
+                <div id="profile-pagination" class="flex justify-center mt-8">
+                    <!-- Sẽ được tạo bằng JavaScript -->
+                </div>
             </div>
         </div>
     </main>
@@ -119,7 +142,7 @@
                 <ul class="space-y-2 text-sm">
                     <li><a href="index.html" class="text-white hover:text-white transition">Trang Chủ</a></li>
                     <li><a href="tintuc.html" class="text-white hover:text-white transition">Tin Tức Cộng Đồng</a></li>
-                    <li><a href="kythuat.html" class="text-white hover:text-white transition">Thông tin Kỹ Thuật</a></li>
+                    <li><a href="kythuat-nuoi.html" class="text-white hover:text-white transition">Kỹ Thuật Nuôi Trồng</a></li>
                     <li><a href="dangtin.html" class="text-white hover:text-white transition">Đăng Bài/Chia Sẻ</a></li>
                 </ul>
             </div>
@@ -129,8 +152,8 @@
                 <ul class="space-y-2 text-sm">
                     <li><a href="kythuat-nuoi.html" class="text-white hover:text-white transition">Kỹ Thuật Nuôi Tôm/Cá</a></li>
                     <li><a href="benh-thuy-san.html" class="text-white hover:text-white transition">Phác Đồ Bệnh Thủy Sản</a></li>
-                    <li><a href="tai-lieu-thuy-san.html" class="text-white hover:text-white transition">Thư Viện Tài Liệu</a></li>
-                    <li><a href="loai-thuy-san.html" class="text-white hover:text-white transition">Danh Mục Loài</a></li>
+                    <li></li>
+                    <li></li>
                 </ul>
             </div>
 

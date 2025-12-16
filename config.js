@@ -9,7 +9,7 @@ window.APP_CONFIG = {
     BASE_URL: BASE_URL,
     API_URL: BASE_URL + 'db.php/',
     IMG_URL: BASE_URL + 'img/',
-    UPLOADS_URL: BASE_URL + 'db.php/get_image.php?file='
+    UPLOADS_URL: BASE_URL + 'uploads/'
 };
 
 // Helper function để tạo URL đầy đủ

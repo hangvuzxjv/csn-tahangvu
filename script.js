@@ -33,12 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 3. HIỂN THỊ BÀI ĐĂNG TRÊN CÁC TRANG (DÙNG API MỚI)
-    // FIX: Bổ sung logic kiểm tra đường dẫn linh hoạt hơn cho môi trường localhost
     const currentPath = window.location.pathname;
-    // Kiểm tra /index.html, / hoặc /ten_thu_muc/
-    const isIndexPage = currentPath.endsWith('index.html') || currentPath.endsWith('/') || currentPath.match(/\/csn-tahangvu\/(\/)?$/i);
-
-    if (isIndexPage) {
+    
+    // Kiểm tra trang chủ
+    if (currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('/')) {
         renderPostsToContainer('post-list', { status: 'approved', limit: 6 }); // Trang Chủ: 6 bài đã duyệt
     }
     if (window.location.pathname.endsWith('tintuc.html')) {
@@ -359,6 +357,7 @@ window.logout = logout;
     // =========================================================
 async function fetchPosts(params = {}) {
     const query = new URLSearchParams(params).toString();
+    
     try {
         const url = window.apiUrl ? apiUrl(`db.php/get_posts.php?${query}`) : `/Project/db.php/get_posts.php?${query}`;
         const response = await fetch(url);
@@ -1157,9 +1156,16 @@ async function loadNews(category = '', sort = 'created_at', keyword = '', page =
         
         if (result.success && result.posts.length > 0) {
             const newsHtml = result.posts.map(post => {
-                const imageUrl = post.image_url ? 
-                    (window.apiUrl ? apiUrl('db.php/get_image.php?file=' + post.image_url) : '/Project/db.php/get_image.php?file=' + post.image_url) : 
-                    'img/1.jpg';
+                // Xử lý ảnh giống như createPostCard
+                let imageUrl;
+                if (post.image_url && post.image_url.trim() !== '') {
+                    // Có ảnh upload - lấy từ thư mục uploads/
+                    imageUrl = 'uploads/' + post.image_url;
+                } else {
+                    // Không có ảnh - dùng ảnh mặc định dựa trên ID của post (1-5)
+                    const imageNum = ((post.id - 1) % 5) + 1;
+                    imageUrl = 'img/' + imageNum + '.jpg';
+                }
                 
                 const summary = post.content.substring(0, 120) + '...';
                 const postDate = new Date(post.created_at).toLocaleDateString('vi-VN');
@@ -1204,8 +1210,10 @@ async function loadNews(category = '', sort = 'created_at', keyword = '', page =
             
             container.innerHTML = newsHtml;
             
-            // Tạo phân trang
-            createNewsPagination(result.totalPages || 1);
+            // Tạo phân trang với thông tin từ API
+            if (result.pagination) {
+                createNewsPagination(result.pagination.totalPages, result.pagination.currentPage);
+            }
         } else {
             container.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">Không tìm thấy tin tức nào.</p>';
         }
@@ -1216,29 +1224,54 @@ async function loadNews(category = '', sort = 'created_at', keyword = '', page =
 }
 
 // Tạo phân trang cho tin tức
-function createNewsPagination(totalPages) {
+function createNewsPagination(totalPages, currentPage = newsCurrentPage) {
     const container = document.getElementById('news-pagination');
-    if (!container) return;
+    if (!container || totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
     
-    let paginationHtml = '<div class="flex space-x-1">';
+    newsCurrentPage = currentPage; // Cập nhật trang hiện tại
+    
+    let paginationHtml = '<div class="flex items-center justify-center space-x-2">';
     
     // Nút Previous
     if (newsCurrentPage > 1) {
-        paginationHtml += `<button onclick="changeNewsPage(${newsCurrentPage - 1})" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-l-lg">‹ Trước</button>`;
+        paginationHtml += `<button onclick="changeNewsPage(${newsCurrentPage - 1})" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg transition">‹ Trước</button>`;
     }
     
-    // Các số trang
+    // Hiển thị trang đầu nếu cần
+    if (newsCurrentPage > 3) {
+        paginationHtml += `<button onclick="changeNewsPage(1)" class="px-3 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg">1</button>`;
+        if (newsCurrentPage > 4) {
+            paginationHtml += `<span class="px-2 text-gray-500">...</span>`;
+        }
+    }
+    
+    // Các số trang xung quanh trang hiện tại
     for (let i = Math.max(1, newsCurrentPage - 2); i <= Math.min(totalPages, newsCurrentPage + 2); i++) {
-        const activeClass = i === newsCurrentPage ? 'bg-teal-600 text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-100';
-        paginationHtml += `<button onclick="changeNewsPage(${i})" class="px-4 py-2 text-sm font-medium ${activeClass}">${i}</button>`;
+        const activeClass = i === newsCurrentPage ? 'bg-teal-600 text-white border-teal-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100';
+        paginationHtml += `<button onclick="changeNewsPage(${i})" class="px-3 py-2 text-sm font-medium ${activeClass} border rounded-lg transition">${i}</button>`;
+    }
+    
+    // Hiển thị trang cuối nếu cần
+    if (newsCurrentPage < totalPages - 2) {
+        if (newsCurrentPage < totalPages - 3) {
+            paginationHtml += `<span class="px-2 text-gray-500">...</span>`;
+        }
+        paginationHtml += `<button onclick="changeNewsPage(${totalPages})" class="px-3 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg">${totalPages}</button>`;
     }
     
     // Nút Next
     if (newsCurrentPage < totalPages) {
-        paginationHtml += `<button onclick="changeNewsPage(${newsCurrentPage + 1})" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-r-lg">Tiếp ›</button>`;
+        paginationHtml += `<button onclick="changeNewsPage(${newsCurrentPage + 1})" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg transition">Tiếp ›</button>`;
     }
     
     paginationHtml += '</div>';
+    
+    // Thêm thông tin trang
+    paginationHtml += `<div class="text-center mt-4 text-sm text-gray-600">Trang ${newsCurrentPage} / ${totalPages}</div>`;
+    
     container.innerHTML = paginationHtml;
 }
 
@@ -1272,15 +1305,42 @@ let kyThuatNuoiCurrentPage = 1;
 
 // Lọc kỹ thuật nuôi
 async function filterKyThuatNuoi() {
-    const species = document.getElementById('species-select')?.value || '';
-    const stage = document.getElementById('stage-select')?.value || '';
+    // Lấy giá trị từ radio button
+    const topicRadio = document.querySelector('input[name="topic"]:checked');
+    const topic = topicRadio ? topicRadio.value : '';
+    const keyword = document.getElementById('keyword-search')?.value || '';
     
     kyThuatNuoiCurrentPage = 1;
-    await loadKyThuatNuoi(species, stage, 1);
+    await loadKyThuatNuoi(topic, keyword, 1);
+}
+
+// Reset filter
+function resetFilter() {
+    document.getElementById('keyword-search').value = '';
+    document.querySelector('input[name="topic"][value=""]').checked = true;
+    filterKyThuatNuoi();
+}
+
+// Xử lý URL parameters khi load trang kỹ thuật nuôi
+function handleKyThuatNuoiParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category');
+    
+    if (category) {
+        // Tự động chọn radio button tương ứng
+        const topicValue = category === 'tom' ? 'tôm' : (category === 'ca' ? 'cá' : '');
+        const radioButton = document.querySelector(`input[name="topic"][value="${topicValue}"]`);
+        
+        if (radioButton) {
+            radioButton.checked = true;
+            // Tự động lọc theo category
+            filterKyThuatNuoi();
+        }
+    }
 }
 
 // Load kỹ thuật nuôi
-async function loadKyThuatNuoi(species = '', stage = '', page = 1) {
+async function loadKyThuatNuoi(topic = '', keyword = '', page = 1) {
     const container = document.getElementById('kythuat-nuoi-list');
     if (!container) return;
     
@@ -1288,8 +1348,8 @@ async function loadKyThuatNuoi(species = '', stage = '', page = 1) {
     
     try {
         const params = new URLSearchParams({
-            species: species,
-            stage: stage,
+            topic: topic,
+            keyword: keyword,
             page: page,
             limit: 10,
             status: 'approved'
@@ -1332,8 +1392,10 @@ async function loadKyThuatNuoi(species = '', stage = '', page = 1) {
             
             container.innerHTML = postsHtml;
             
-            // Tạo phân trang
-            createKyThuatNuoiPagination(result.totalPages || 1);
+            // Tạo phân trang với thông tin từ API
+            if (result.pagination) {
+                createKyThuatNuoiPagination(result.pagination.totalPages, result.pagination.currentPage);
+            }
         } else {
             container.innerHTML = '<p class="text-center text-gray-500 py-10">Không tìm thấy bài viết nào.</p>';
         }
@@ -1343,47 +1405,82 @@ async function loadKyThuatNuoi(species = '', stage = '', page = 1) {
     }
 }
 
-// Tạo phân trang
-function createKyThuatNuoiPagination(totalPages) {
+// Tạo phân trang cho kỹ thuật nuôi
+function createKyThuatNuoiPagination(totalPages, currentPage = kyThuatNuoiCurrentPage) {
     const container = document.getElementById('kythuat-nuoi-pagination');
-    if (!container) return;
+    if (!container || totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
     
-    let paginationHtml = '<div class="flex space-x-1">';
+    kyThuatNuoiCurrentPage = currentPage;
     
+    let paginationHtml = '<div class="flex items-center justify-center space-x-2">';
+    
+    // Nút Previous
     if (kyThuatNuoiCurrentPage > 1) {
-        paginationHtml += `<button onclick="changeKyThuatNuoiPage(${kyThuatNuoiCurrentPage - 1})" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-l-lg">‹</button>`;
+        paginationHtml += `<button onclick="changeKyThuatNuoiPage(${kyThuatNuoiCurrentPage - 1})" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg transition">‹ Trước</button>`;
     }
     
+    // Hiển thị trang đầu nếu cần
+    if (kyThuatNuoiCurrentPage > 3) {
+        paginationHtml += `<button onclick="changeKyThuatNuoiPage(1)" class="px-3 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg">1</button>`;
+        if (kyThuatNuoiCurrentPage > 4) {
+            paginationHtml += `<span class="px-2 text-gray-500">...</span>`;
+        }
+    }
+    
+    // Các số trang xung quanh trang hiện tại
     for (let i = Math.max(1, kyThuatNuoiCurrentPage - 2); i <= Math.min(totalPages, kyThuatNuoiCurrentPage + 2); i++) {
-        const activeClass = i === kyThuatNuoiCurrentPage ? 'bg-teal-600 text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-100';
-        paginationHtml += `<button onclick="changeKyThuatNuoiPage(${i})" class="px-4 py-2 text-sm font-medium ${activeClass}">${i}</button>`;
+        const activeClass = i === kyThuatNuoiCurrentPage ? 'bg-teal-600 text-white border-teal-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100';
+        paginationHtml += `<button onclick="changeKyThuatNuoiPage(${i})" class="px-3 py-2 text-sm font-medium ${activeClass} border rounded-lg transition">${i}</button>`;
     }
     
+    // Hiển thị trang cuối nếu cần
+    if (kyThuatNuoiCurrentPage < totalPages - 2) {
+        if (kyThuatNuoiCurrentPage < totalPages - 3) {
+            paginationHtml += `<span class="px-2 text-gray-500">...</span>`;
+        }
+        paginationHtml += `<button onclick="changeKyThuatNuoiPage(${totalPages})" class="px-3 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg">${totalPages}</button>`;
+    }
+    
+    // Nút Next
     if (kyThuatNuoiCurrentPage < totalPages) {
-        paginationHtml += `<button onclick="changeKyThuatNuoiPage(${kyThuatNuoiCurrentPage + 1})" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-r-lg">›</button>`;
+        paginationHtml += `<button onclick="changeKyThuatNuoiPage(${kyThuatNuoiCurrentPage + 1})" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg transition">Tiếp ›</button>`;
     }
     
     paginationHtml += '</div>';
+    
+    // Thêm thông tin trang
+    paginationHtml += `<div class="text-center mt-4 text-sm text-gray-600">Trang ${kyThuatNuoiCurrentPage} / ${totalPages}</div>`;
+    
     container.innerHTML = paginationHtml;
 }
 
 // Chuyển trang
 function changeKyThuatNuoiPage(page) {
     kyThuatNuoiCurrentPage = page;
-    const species = document.getElementById('species-select')?.value || '';
-    const stage = document.getElementById('stage-select')?.value || '';
-    loadKyThuatNuoi(species, stage, page);
+    const topicRadio = document.querySelector('input[name="topic"]:checked');
+    const topic = topicRadio ? topicRadio.value : '';
+    const keyword = document.getElementById('keyword-search')?.value || '';
+    loadKyThuatNuoi(topic, keyword, page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // Export functions
 window.filterKyThuatNuoi = filterKyThuatNuoi;
 window.changeKyThuatNuoiPage = changeKyThuatNuoiPage;
+window.resetFilter = resetFilter;
 
 // Auto load
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.endsWith('kythuat-nuoi.html')) {
-        loadKyThuatNuoi();
+        // Xử lý URL parameters trước khi load
+        handleKyThuatNuoiParams();
+        // Nếu không có parameters, load tất cả
+        if (!window.location.search) {
+            loadKyThuatNuoi();
+        }
     }
 });
 
@@ -1567,3 +1664,239 @@ window.handleSendOTP = handleSendOTP;
 window.handleVerifyOTP = handleVerifyOTP;
 window.showOTPForm = showOTPForm;
 window.showPhoneForm = showPhoneForm;
+
+// =========================================================
+// CHỨC NĂNG: WIDGETS CHO TRANG CHỦ
+// =========================================================
+
+// Load thống kê cho sidebar
+async function loadHomeStats() {
+    try {
+        // Load tổng số bài viết
+        const postsResponse = await fetch(apiUrl('db.php/get_posts.php?status=approved&limit=1000'));
+        const postsResult = await postsResponse.json();
+        
+        if (postsResult.success) {
+            const totalPostsElement = document.getElementById('total-posts');
+            const todayPostsElement = document.getElementById('today-posts');
+            
+            if (totalPostsElement) {
+                totalPostsElement.textContent = postsResult.posts.length;
+            }
+            
+            // Đếm bài viết hôm nay
+            const today = new Date().toDateString();
+            const todayPosts = postsResult.posts.filter(post => {
+                const postDate = new Date(post.created_at).toDateString();
+                return postDate === today;
+            });
+            
+            if (todayPostsElement) {
+                todayPostsElement.textContent = todayPosts.length;
+            }
+        }
+        
+        // Giả lập số thành viên (có thể tạo API riêng sau)
+        const totalUsersElement = document.getElementById('total-users');
+        if (totalUsersElement) {
+            totalUsersElement.textContent = '150+';
+        }
+        
+    } catch (error) {
+        console.error('Lỗi load thống kê:', error);
+    }
+}
+
+// Load bài viết mới nhất cho sidebar
+async function loadLatestPosts() {
+    try {
+        const response = await fetch(apiUrl('db.php/get_posts.php?status=approved&limit=5'));
+        const result = await response.json();
+        
+        const latestPostsElement = document.getElementById('latest-posts');
+        if (!latestPostsElement) return;
+        
+        if (result.success && result.posts.length > 0) {
+            const latestHtml = result.posts.map(post => {
+                const postDate = new Date(post.created_at).toLocaleDateString('vi-VN');
+                const shortTitle = post.title.length > 40 ? post.title.substring(0, 40) + '...' : post.title;
+                
+                return `
+                    <div class="border-b border-gray-100 pb-2 mb-2 last:border-b-0">
+                        <a href="chitiet.html?id=${post.id}" class="block hover:text-teal-600 transition">
+                            <div class="text-sm font-medium text-gray-800 leading-tight">${shortTitle}</div>
+                            <div class="text-xs text-gray-500 mt-1">${postDate}</div>
+                        </a>
+                    </div>
+                `;
+            }).join('');
+            
+            latestPostsElement.innerHTML = latestHtml;
+        } else {
+            latestPostsElement.innerHTML = '<div class="text-sm text-gray-500">Chưa có bài viết</div>';
+        }
+    } catch (error) {
+        console.error('Lỗi load bài mới:', error);
+        const latestPostsElement = document.getElementById('latest-posts');
+        if (latestPostsElement) {
+            latestPostsElement.innerHTML = '<div class="text-sm text-red-500">Lỗi tải dữ liệu</div>';
+        }
+    }
+}
+
+// Load bài viết phổ biến (giả lập - có thể cải thiện với view count thực tế)
+async function loadPopularPosts() {
+    try {
+        const response = await fetch(apiUrl('db.php/get_posts.php?status=approved&limit=5'));
+        const result = await response.json();
+        
+        if (result.success && result.posts.length > 0) {
+            // Giả lập popularity bằng cách sắp xếp ngẫu nhiên
+            const shuffled = result.posts.sort(() => 0.5 - Math.random()).slice(0, 4);
+            
+            const popularHtml = shuffled.map((post, index) => {
+                const shortTitle = post.title.length > 35 ? post.title.substring(0, 35) + '...' : post.title;
+                const views = Math.floor(Math.random() * 500) + 100; // Giả lập view count
+                
+                return `
+                    <div class="border-b border-gray-100 pb-2 mb-2 last:border-b-0">
+                        <a href="chitiet.html?id=${post.id}" class="block hover:text-teal-600 transition">
+                            <div class="flex items-start space-x-2">
+                                <span class="text-xs font-bold text-orange-500 mt-1">#${index + 1}</span>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium text-gray-800 leading-tight">${shortTitle}</div>
+                                    <div class="text-xs text-gray-500 mt-1">👁️ ${views} lượt xem</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('popular-posts').innerHTML = popularHtml;
+        }
+    } catch (error) {
+        console.error('Lỗi load bài phổ biến:', error);
+        document.getElementById('popular-posts').innerHTML = '<div class="text-sm text-red-500">Lỗi tải dữ liệu</div>';
+    }
+}
+
+// Khởi tạo widgets khi load trang chủ
+document.addEventListener('DOMContentLoaded', () => {
+    const currentPath = window.location.pathname;
+    
+    if (currentPath.endsWith('index.html') || currentPath.endsWith('/')) {
+        loadHomeStats();
+        loadLatestPosts();
+    }
+});
+
+// =========================================================
+// PHÂN TRANG CHO PROFILE
+// =========================================================
+
+let profileCurrentPage = 1;
+
+// Cập nhật renderMyPosts để hỗ trợ phân trang
+async function renderMyPostsPaginated(page = 1) {
+    const container = document.getElementById('my-posts-list');
+    if (!container) return;
+
+    container.innerHTML = '<p class="text-center text-gray-500 py-6">Đang tải...</p>';
+
+    try {
+        const params = new URLSearchParams({
+            author: 'me',
+            status: 'all',
+            page: page,
+            limit: 5
+        });
+        
+        const url = window.apiUrl ? apiUrl(`db.php/get_posts.php?${params}`) : `/Project/db.php/get_posts.php?${params}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        
+        if (result.success && result.posts.length > 0) {
+            const postsHtml = result.posts.map(post => {
+                const statusClass = post.status === 'approved' ? 'text-green-600' : (post.status === 'pending' ? 'text-yellow-600' : 'text-red-600');
+                const statusText = post.status === 'approved' ? '✅ Đã Duyệt' : (post.status === 'pending' ? '⏳ Chờ Duyệt' : '❌ Bị Từ Chối');
+                
+                const deleteButton = (post.status !== 'approved') ?
+                    `<button data-action="delete" data-post-id="${post.id}" class="text-sm text-red-500 hover:text-red-700 transition font-medium ml-3">🗑️ Xóa</button>` : '';
+
+                return `
+                    <div class="bg-white p-4 rounded-lg shadow flex justify-between items-center hover:shadow-md transition" data-post-id="${post.id}">
+                        <div>
+                            <a href="chitiet.html?id=${post.id}" class="text-lg font-semibold text-gray-800 hover:text-teal-600">${post.title}</a>
+                            <p class="text-sm text-gray-500 mt-1">Đăng ngày: ${new Date(post.created_at).toLocaleDateString('vi-VN')} | <span class="${statusClass} font-medium">${statusText}</span></p>
+                        </div>
+                        ${deleteButton}
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = postsHtml;
+            
+            // Tạo phân trang
+            if (result.pagination && result.pagination.totalPages > 1) {
+                createProfilePagination(result.pagination.totalPages, result.pagination.currentPage);
+            } else {
+                document.getElementById('profile-pagination').innerHTML = '';
+            }
+            
+        } else {
+            container.innerHTML = `<p class="text-center text-gray-500 py-6">Bạn chưa có bài viết nào. Hãy <a href="dangtin.html" class="text-teal-600 hover:underline">Đăng Tin</a> để chia sẻ kinh nghiệm!</p>`;
+            document.getElementById('profile-pagination').innerHTML = '';
+        }
+        
+    } catch (error) {
+        console.error('Lỗi load bài viết profile:', error);
+        container.innerHTML = '<p class="text-center text-red-500 py-6">Lỗi tải dữ liệu</p>';
+    }
+}
+
+// Tạo phân trang cho profile
+function createProfilePagination(totalPages, currentPage = profileCurrentPage) {
+    const container = document.getElementById('profile-pagination');
+    if (!container || totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    profileCurrentPage = currentPage;
+    
+    let paginationHtml = '<div class="flex items-center justify-center space-x-2">';
+    
+    if (profileCurrentPage > 1) {
+        paginationHtml += `<button onclick="changeProfilePage(${profileCurrentPage - 1})" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg transition">‹ Trước</button>`;
+    }
+    
+    for (let i = Math.max(1, profileCurrentPage - 2); i <= Math.min(totalPages, profileCurrentPage + 2); i++) {
+        const activeClass = i === profileCurrentPage ? 'bg-teal-600 text-white border-teal-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100';
+        paginationHtml += `<button onclick="changeProfilePage(${i})" class="px-3 py-2 text-sm font-medium ${activeClass} border rounded-lg transition">${i}</button>`;
+    }
+    
+    if (profileCurrentPage < totalPages) {
+        paginationHtml += `<button onclick="changeProfilePage(${profileCurrentPage + 1})" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg transition">Tiếp ›</button>`;
+    }
+    
+    paginationHtml += '</div>';
+    paginationHtml += `<div class="text-center mt-4 text-sm text-gray-600">Trang ${profileCurrentPage} / ${totalPages}</div>`;
+    
+    container.innerHTML = paginationHtml;
+}
+
+// Chuyển trang profile
+function changeProfilePage(page) {
+    profileCurrentPage = page;
+    renderMyPostsPaginated(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Export functions
+window.changeProfilePage = changeProfilePage;
+
+// Cập nhật renderMyPosts gốc để sử dụng phiên bản có phân trang
+window.renderMyPosts = function() {
+    renderMyPostsPaginated(1);
+};

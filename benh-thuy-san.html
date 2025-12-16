@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bệnh Thủy Sản & Phòng Trị</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="config.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gray-50">
@@ -21,11 +22,33 @@
             <nav class="hidden lg:flex space-x-8 text-base font-medium">
                 <a href="index.html" class="text-gray-700 hover:text-teal-600 transition">Trang Chủ</a>
                 <a href="tintuc.html" class="text-gray-700 hover:text-teal-600 transition">Tin Tức</a>
-                <a href="kythuat.html" class="text-gray-700 hover:text-teal-600 transition">Thông tin/Kỹ Thuật</a>
+                
+                <!-- Dropdown Menu cho Kỹ Thuật -->
+                <div class="relative group">
+                    <a href="kythuat-nuoi.html" class="text-teal-600 border-b-2 border-teal-600 flex items-center">
+                        Kỹ Thuật Nuôi Trồng
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </a>
+                    <!-- Dropdown content -->
+                    <div class="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                        <a href="kythuat-nuoi.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition"> Kỹ Thuật Nuôi Tôm/Cá</a>
+                        <a href="benh-thuy-san.html" class="block px-4 py-2 text-sm text-teal-600 bg-teal-50 font-semibold transition">🦠 Bệnh Thủy Sản</a>
+                        
+                        
+                        
+                    </div>
+                </div>
+                
                 <a href="dangtin.html" class="text-gray-700 hover:text-teal-600 transition">Đăng Tin</a>
             </nav>
 
             <div class="flex items-center space-x-4">
+                
+                <div class="relative hidden sm:block"><input type="text" id="search-input" placeholder="Tìm kiếm... (Enter)" onkeypress="if(event.key==='Enter') performSearch()" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm w-64 bg-white hover:border-teal-400 transition shadow-sm"></div>
+                
+    
                 <div id="auth-buttons">
                     <a href="dangnhap.html" class="text-sm font-medium text-gray-700 hover:text-teal-600 transition">Đăng Nhập</a>
                     <a href="dangky.html" class="ml-2 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-full hover:bg-teal-700 transition">Đăng Ký</a>
@@ -50,14 +73,74 @@
             <nav class="flex flex-col space-y-2 p-4 text-sm font-medium">
                 <a href="index.html" class="text-gray-700 hover:text-teal-600 transition">Trang Chủ</a>
                 <a href="tintuc.html" class="text-gray-700 hover:text-teal-600 transition">Tin Tức</a>
-                <a href="kythuat.html" class="text-gray-700 hover:text-teal-600 transition">Thông tin/Kỹ Thuật</a>
+                <a href="kythuat-nuoi.html" class="text-gray-700 hover:text-teal-600 transition">Kỹ Thuật Nuôi Trồng</a>
+                <a href="benh-thuy-san.html" class="text-teal-600 font-semibold">Bệnh Thủy Sản</a>
+                <a href="dangtin.html" class="text-gray-700 hover:text-teal-600 transition">Đăng Tin</a>
             </nav>
         </div>
     </header>
 
     <main class="container mx-auto px-4 py-10">
-        <h1 class="text-4xl font-extrabold text-gray-800 mb-2">🦠 Bệnh Thủy Sản & Phác Đồ Phòng Trị</h1>
-        <p class="text-gray-600 mb-8">Tra cứu các loại bệnh phổ biến trên thủy sản tại Trà Vinh, dấu hiệu nhận biết và biện pháp can thiệp kịp thời.</p>
+        <!-- Breadcrumb -->
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="index.html" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-teal-600">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        Trang Chủ
+                    </a>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Bệnh Thủy Sản</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="mb-12">
+            <div class="bg-gradient-to-r from-gray-600 to-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+                <div class="relative h-80">
+                    <img src="img/banner2.jpg" alt="Bệnh thủy sản" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/60"></div>
+                    <div class="absolute inset-0 flex items-center justify-center text-center text-white">
+                        <div>
+                            <div class="text-6xl mb-4"></div>
+                            <h1 class="text-5xl font-bold mb-4">Bệnh Thủy Sản & Phòng Trị</h1>
+                            <p class="text-xl opacity-90 max-w-2xl mx-auto">Tra cứu các loại bệnh phổ biến, dấu hiệu nhận biết và phác đồ điều trị hiệu quả cho thủy sản tại Trà Vinh</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Thống kê nhanh -->
+        <section class="mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center border-l-4 border-gray-400">
+                    <div class="text-3xl font-bold text-gray-700 mb-2">15+</div>
+                    <div class="text-sm text-gray-600">Bệnh Phổ Biến</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center border-l-4 border-gray-400">
+                    <div class="text-3xl font-bold text-gray-700 mb-2">8</div>
+                    <div class="text-sm text-gray-600">Bệnh Nguy Hiểm</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center border-l-4 border-gray-400">
+                    <div class="text-3xl font-bold text-gray-700 mb-2">90%</div>
+                    <div class="text-sm text-gray-600">Tỷ Lệ Phòng Được</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center border-l-4 border-gray-400">
+                    <div class="text-3xl font-bold text-gray-700 mb-2">24/7</div>
+                    <div class="text-sm text-gray-600">Hỗ Trợ Khẩn Cấp</div>
+                </div>
+            </div>
+        </section>
         
         <div class="flex flex-col lg:flex-row gap-8">
             
@@ -65,76 +148,534 @@
                 <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Lọc Bệnh</h3>
                 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Bệnh trên Loài</label>
-                    <select class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-teal-500 focus:border-teal-500">
-                        <option value="all">Tất cả</option>
-                        <option value="tom">Tôm (Thẻ, Sú)</option>
-                        <option value="ca">Cá (Tra, Lóc, Diêu Hồng)</option>
-                        <option value="nhuyen-the">Nhuyễn Thể (Nghêu, Sò)</option>
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tìm theo tên bệnh</label>
+                    <input type="text" placeholder="Nhập tên bệnh..." class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-red-500 focus:border-red-500">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Bệnh trên Loài</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="species" value="" class="text-red-600 focus:ring-red-500" checked>
+                            <span class="text-sm">Tất cả</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="species" value="tom" class="text-red-600 focus:ring-red-500">
+                            <span class="text-sm"> Tôm (Thẻ, Sú)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="species" value="ca" class="text-red-600 focus:ring-red-500">
+                            <span class="text-sm"> Cá (Tra, Lóc, Rô Phi)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="species" value="nhuyen-the" class="text-red-600 focus:ring-red-500">
+                            <span class="text-sm"> Nhuyễn Thể (Nghêu, Sò)</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nguyên Nhân Gây Bệnh</label>
-                    <select class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-teal-500 focus:border-teal-500">
-                        <option value="all">Tất cả</option>
-                        <option value="virus">Do Virus</option>
-                        <option value="vi-khuan">Do Vi Khuẩn</option>
-                        <option value="ky-sinh">Do Ký Sinh Trùng</option>
-                        <option value="moi-truong">Do Môi Trường</option>
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Mức độ nguy hiểm</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" class="text-red-600 focus:ring-red-500">
+                            <span class="text-sm"> Cực kỳ nguy hiểm</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" class="text-yellow-600 focus:ring-yellow-500">
+                            <span class="text-sm"> Nguy hiểm</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" class="text-blue-600 focus:ring-blue-500">
+                            <span class="text-sm"> Trung bình</span>
+                        </label>
+                    </div>
                 </div>
                 
-                <button class="w-full bg-red-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-red-700 mt-2">Áp Dụng Lọc Bệnh</button>
+                <button onclick="filterDiseases()" class="w-full bg-gray-600 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-700 transition shadow-md">
+                    🔍 Tìm Kiếm Bệnh
+                </button>
+                
+                <button onclick="resetFilter()" class="w-full bg-gray-200 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-300 transition mt-2">
+                    ↻ Đặt Lại
+                </button>
             </div>
 
-            <div class="w-full lg:w-3/4 space-y-6">
+            <div class="w-full lg:w-3/4 space-y-6" id="diseases-container">
                 
+                <!-- Bệnh Cực Kỳ Nguy Hiểm -->
+                <div class="bg-gray-50 border-l-4 border-gray-400 p-4 rounded-lg mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">🚨 Bệnh Cực Kỳ Nguy Hiểm - Cần Xử Lý Khẩn Cấp</h2>
+                    <p class="text-gray-700 text-sm">Các bệnh này có thể gây chết hàng loạt trong thời gian ngắn. Cần phát hiện sớm và xử lý ngay lập tức.</p>
+                </div>
+
                 <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-red-600">
                     <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-semibold text-red-600 bg-red-100 px-2 py-0.5 rounded">Tôm | Virus</span>
-                            <h3 class="text-2xl font-bold text-gray-800 mt-1 mb-2 hover:text-red-600"><a href="chitiet-benh-dom-trang.html">Bệnh Đốm Trắng (WSD)</a></h3>
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-xs font-semibold text-red-600 bg-red-100 px-2 py-0.5 rounded"> Tôm | Virus</span>
+                                <span class="text-xs font-bold text-white bg-red-600 px-2 py-0.5 rounded">CỰC NGUY HIỂM</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-red-600">
+                                <a href="#benh-dom-trang">Bệnh Đốm Trắng (WSSV)</a>
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                    <p class="text-gray-600">Đốm trắng trên vỏ, tôm bơi lờ đờ, chết hàng loạt</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                    <p class="text-red-600 font-bold">80-100% trong 3-10 ngày</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Phòng ngừa:</span>
+                                    <p class="text-green-600">Kiểm soát con giống, khử trùng</p>
+                                </div>
+                            </div>
                         </div>
-                        <span class="text-sm text-gray-400">Cập nhật: 01/11/2025</span>
+                        <span class="text-sm text-gray-400">Cập nhật: 15/12/2025</span>
                     </div>
-                    <p class="text-gray-600 line-clamp-3 text-sm mt-2">Là bệnh nguy hiểm nhất, gây thiệt hại nặng nề. Bài viết mô tả chi tiết dấu hiệu nhận biết (đốm trắng trên vỏ), tốc độ lây lan và các biện pháp khẩn cấp...</p>
-                    <a href="chitiet-benh-dom-trang.html" class="mt-3 inline-block text-red-600 font-medium hover:underline text-sm">Xem Phác Đồ Phòng Trị →</a>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span>Báo cáo khẩn cấp</span>
+                            <span>Hotline: 0292.xxx.xxx</span>
+                        </div>
+                        <a href="#benh-dom-trang" class="text-red-600 font-medium hover:underline text-sm">Xem Phác Đồ Khẩn Cấp →</a>
+                    </div>
+                </article>
+
+                <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-red-600">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-xs font-semibold text-red-600 bg-red-100 px-2 py-0.5 rounded">🦐 Tôm | Vi Khuẩn</span>
+                                <span class="text-xs font-bold text-white bg-red-600 px-2 py-0.5 rounded">CỰC NGUY HIỂM</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-red-600">
+                                <a href="#benh-gan-tuy">Hoại Tử Gan Tụy Cấp (AHPND/EMS)</a>
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                    <p class="text-gray-600">Gan tụy teo, nhạt màu, tôm bỏ ăn</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                    <p class="text-red-600 font-bold">70-100% trong 30 ngày đầu</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Phòng ngừa:</span>
+                                    <p class="text-green-600">Men vi sinh, thức ăn sạch</p>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-sm text-gray-400">Cập nhật: 12/12/2025</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span>🧪 Xét nghiệm PCR khuyến nghị</span>
+                        </div>
+                        <a href="#benh-gan-tuy" class="text-red-600 font-medium hover:underline text-sm">Xem Phác Đồ Điều Trị →</a>
+                    </div>
+                </article>
+
+                <!-- Bệnh Nguy Hiểm -->
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg mb-6 mt-8">
+                    <h2 class="text-xl font-bold text-yellow-700 mb-2">⚠️ Bệnh Nguy Hiểm - Cần Theo Dõi Chặt Chẽ</h2>
+                    <p class="text-yellow-600 text-sm">Các bệnh này có thể gây thiệt hại lớn nếu không được phát hiện và xử lý kịp thời.</p>
+                </div>
+                
+                <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-yellow-600">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-xs font-semibold text-yellow-600 bg-yellow-100 px-2 py-0.5 rounded">🐟 Cá | Ký Sinh Trùng</span>
+                                <span class="text-xs font-bold text-white bg-yellow-600 px-2 py-0.5 rounded">NGUY HIỂM</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-yellow-600">
+                                <a href="#benh-lo-loet">Bệnh Lở Loét (EUS) trên Cá Tra</a>
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                    <p class="text-gray-600">Vết loét sâu, xuất huyết trên thân</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                    <p class="text-yellow-600 font-bold">30-60% nếu không điều trị</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Điều trị:</span>
+                                    <p class="text-green-600">Cải thiện môi trường, thuốc sát trùng</p>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-sm text-gray-400">Cập nhật: 10/12/2025</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span>🌡️ Kiểm tra chất lượng nước</span>
+                        </div>
+                        <a href="#benh-lo-loet" class="text-yellow-600 font-medium hover:underline text-sm">Xem Hướng Dẫn Điều Trị →</a>
+                    </div>
                 </article>
 
                 <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-yellow-600">
                     <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-semibold text-yellow-600 bg-yellow-100 px-2 py-0.5 rounded">Tôm | Vi Khuẩn</span>
-                            <h3 class="text-2xl font-bold text-gray-800 mt-1 mb-2 hover:text-yellow-600"><a href="chitiet-benh-gan-tuy.html">Hoại Tử Gan Tụy Cấp (AHPND/EMS)</a></h3>
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-xs font-semibold text-yellow-600 bg-yellow-100 px-2 py-0.5 rounded">🦐 Tôm | Vi Khuẩn</span>
+                                <span class="text-xs font-bold text-white bg-yellow-600 px-2 py-0.5 rounded">NGUY HIỂM</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-yellow-600">
+                                <a href="#benh-vibrio">Bệnh Vibrio Harveyi (Phát Sáng)</a>
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                    <p class="text-gray-600">Tôm phát sáng ban đêm, chậm lớn</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                    <p class="text-yellow-600 font-bold">20-50% tùy giai đoạn</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Điều trị:</span>
+                                    <p class="text-green-600">Kháng sinh, cải thiện nước</p>
+                                </div>
+                            </div>
                         </div>
-                        <span class="text-sm text-gray-400">Cập nhật: 25/10/2025</span>
+                        <span class="text-sm text-gray-400">Cập nhật: 08/12/2025</span>
                     </div>
-                    <p class="text-gray-600 line-clamp-3 text-sm mt-2">Mô tả dấu hiệu tôm bỏ ăn, gan tụy teo, nhạt màu. Cung cấp các biện pháp phòng ngừa bằng men vi sinh và kháng sinh đặc trị (khi được phép)...</p>
-                    <a href="chitiet-benh-gan-tuy.html" class="mt-3 inline-block text-red-600 font-medium hover:underline text-sm">Xem Phác Đồ Phòng Trị →</a>
-                </article>
-                
-                <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-blue-600">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-0.5 rounded">Cá | Ký Sinh</span>
-                            <h3 class="text-2xl font-bold text-gray-800 mt-1 mb-2 hover:text-blue-600"><a href="chitiet-benh-lo-loet.html">Bệnh Lở Loét (EUS) trên Cá Tra</a></h3>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span>🔬 Kiểm tra ban đêm</span>
                         </div>
-                        <span class="text-sm text-gray-400">Cập nhật: 15/10/2025</span>
+                        <a href="#benh-vibrio" class="text-yellow-600 font-medium hover:underline text-sm">Xem Phác Đồ Điều Trị →</a>
                     </div>
-                    <p class="text-gray-600 line-clamp-3 text-sm mt-2">Hướng dẫn nhận biết vết loét, xuất huyết trên thân cá. Các biện pháp cải tạo môi trường và sử dụng hóa chất an toàn để điều trị bệnh EUS...</p>
-                    <a href="chitiet-benh-lo-loet.html" class="mt-3 inline-block text-red-600 font-medium hover:underline text-sm">Xem Phác Đồ Phòng Trị →</a>
                 </article>
 
-                <div class="flex justify-center pt-6">
-                    <div class="flex space-x-1">
-                        <button class="px-4 py-2 text-sm font-medium bg-teal-600 text-white rounded-l-lg">1</button>
-                        <button class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100">2</button>
+                <!-- Bệnh Trung Bình -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg mb-6 mt-8">
+                    <h2 class="text-xl font-bold text-blue-700 mb-2">ℹ️ Bệnh Thường Gặp - Có Thể Điều Trị</h2>
+                    <p class="text-blue-600 text-sm">Các bệnh này thường gặp nhưng có thể điều trị hiệu quả nếu phát hiện sớm.</p>
+                </div>
+
+                <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-blue-600">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-0.5 rounded">🐟 Cá | Nấm</span>
+                                <span class="text-xs font-bold text-white bg-blue-600 px-2 py-0.5 rounded">TRUNG BÌNH</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-blue-600">
+                                <a href="#benh-nam">Bệnh Nấm Saprolegnia</a>
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                    <p class="text-gray-600">Lông trắng mọc trên vây, thân cá</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                    <p class="text-blue-600 font-bold">10-30% nếu không điều trị</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Điều trị:</span>
+                                    <p class="text-green-600">Thuốc chống nấm, muối</p>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-sm text-gray-400">Cập nhật: 05/12/2025</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span>🧂 Tắm muối 3-5‰</span>
+                        </div>
+                        <a href="#benh-nam" class="text-blue-600 font-medium hover:underline text-sm">Xem Hướng Dẫn →</a>
+                    </div>
+                </article>
+
+                <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-blue-600">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-0.5 rounded">🦐 Tôm | Ký Sinh</span>
+                                <span class="text-xs font-bold text-white bg-blue-600 px-2 py-0.5 rounded">TRUNG BÌNH</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-blue-600">
+                                <a href="#benh-zoothamnium">Bệnh Zoothamnium (Chuông Lông)</a>
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                    <p class="text-gray-600">Lông trắng trên mang, chân bơi</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                    <p class="text-blue-600 font-bold">5-20% nếu điều trị kịp thời</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Điều trị:</span>
+                                    <p class="text-green-600">Formalin, cải thiện nước</p>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-sm text-gray-400">Cập nhật: 03/12/2025</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span>💧 Thay nước 30-50%</span>
+                        </div>
+                        <a href="#benh-zoothamnium" class="text-blue-600 font-medium hover:underline text-sm">Xem Hướng Dẫn →</a>
+                    </div>
+                </article>
+
+                <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-green-600">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded">🐟 Cá | Vi Khuẩn</span>
+                                <span class="text-xs font-bold text-white bg-green-600 px-2 py-0.5 rounded">NHẸ</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-green-600">
+                                <a href="#benh-xuất-huyết">Bệnh Xuất Huyết Trên Cá Rô Phi</a>
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                    <p class="text-gray-600">Xuất huyết dưới da, vây đỏ</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                    <p class="text-green-600 font-bold">5-15% nếu điều trị sớm</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Điều trị:</span>
+                                    <p class="text-green-600">Kháng sinh, vitamin C</p>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-sm text-gray-400">Cập nhật: 01/12/2025</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span>💊 Oxytetracycline 50mg/kg thức ăn</span>
+                        </div>
+                        <a href="#benh-xuất-huyết" class="text-green-600 font-medium hover:underline text-sm">Xem Hướng Dẫn →</a>
+                    </div>
+                </article>
+
+                <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-purple-600">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-xs font-semibold text-purple-600 bg-purple-100 px-2 py-0.5 rounded">🦪 Nghêu | Ký Sinh</span>
+                                <span class="text-xs font-bold text-white bg-blue-600 px-2 py-0.5 rounded">TRUNG BÌNH</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-purple-600">
+                                <a href="#benh-perkinsus">Bệnh Perkinsus Trên Nghêu</a>
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                    <p class="text-gray-600">Nghêu yếu, mở vỏ liên tục</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                    <p class="text-purple-600 font-bold">20-40% trong mùa nóng</p>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="font-semibold text-gray-700">Phòng ngừa:</span>
+                                    <p class="text-green-600">Kiểm soát mật độ, nước sạch</p>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-sm text-gray-400">Cập nhật: 28/11/2025</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                            <span>🌡️ Tránh nhiệt độ > 30°C</span>
+                        </div>
+                        <a href="#benh-perkinsus" class="text-purple-600 font-medium hover:underline text-sm">Xem Hướng Dẫn →</a>
+                    </div>
+                </article>
+
+
+
+                <!-- Thêm trang 2 với các bệnh bổ sung -->
+                <div id="page-2-diseases" class="hidden space-y-6">
+                    
+                    <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-orange-600">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <span class="text-xs font-semibold text-orange-600 bg-orange-100 px-2 py-0.5 rounded">🦐 Tôm | Nấm</span>
+                                    <span class="text-xs font-bold text-white bg-blue-600 px-2 py-0.5 rounded">TRUNG BÌNH</span>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-orange-600">
+                                    <a href="#benh-nam-den">Bệnh Nấm Đen (Melanosis)</a>
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                    <div class="text-sm">
+                                        <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                        <p class="text-gray-600">Đốm đen trên vỏ, mang</p>
+                                    </div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                        <p class="text-orange-600 font-bold">15-30% nếu không điều trị</p>
+                                    </div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold text-gray-700">Điều trị:</span>
+                                        <p class="text-green-600">Thuốc chống nấm, cải thiện nước</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-400">Cập nhật: 15/11/2025</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                            <div class="flex items-center space-x-4 text-xs text-gray-500">
+                                <span>🧪 Kiểm tra pH nước</span>
+                            </div>
+                            <a href="#benh-nam-den" class="text-orange-600 font-medium hover:underline text-sm">Xem Hướng Dẫn →</a>
+                        </div>
+                    </article>
+
+                    <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-indigo-600">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <span class="text-xs font-semibold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded">🐟 Cá | Virus</span>
+                                    <span class="text-xs font-bold text-white bg-yellow-600 px-2 py-0.5 rounded">NGUY HIỂM</span>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-indigo-600">
+                                    <a href="#benh-vhs">Bệnh Xuất Huyết Virus (VHS)</a>
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                    <div class="text-sm">
+                                        <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                        <p class="text-gray-600">Xuất huyết nội tạng, mắt lồi</p>
+                                    </div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                        <p class="text-indigo-600 font-bold">40-80% trong nước lạnh</p>
+                                    </div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold text-gray-700">Phòng ngừa:</span>
+                                        <p class="text-green-600">Cách ly, khử trùng</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-400">Cập nhật: 12/11/2025</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                            <div class="flex items-center space-x-4 text-xs text-gray-500">
+                                <span>❄️ Nhiệt độ thấp làm tăng nguy cơ</span>
+                            </div>
+                            <a href="#benh-vhs" class="text-indigo-600 font-medium hover:underline text-sm">Xem Phác Đồ →</a>
+                        </div>
+                    </article>
+
+                    <article class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-pink-600">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <span class="text-xs font-semibold text-pink-600 bg-pink-100 px-2 py-0.5 rounded">🦪 Sò | Môi Trường</span>
+                                    <span class="text-xs font-bold text-white bg-green-600 px-2 py-0.5 rounded">NHẸ</span>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-2 hover:text-pink-600">
+                                    <a href="#benh-stress-moi-truong">Stress Môi Trường Sò Huyết</a>
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                    <div class="text-sm">
+                                        <span class="font-semibold text-gray-700">Dấu hiệu:</span>
+                                        <p class="text-gray-600">Sò mở vỏ liên tục, yếu</p>
+                                    </div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold text-gray-700">Tỷ lệ chết:</span>
+                                        <p class="text-pink-600 font-bold">5-15% nếu kéo dài</p>
+                                    </div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold text-gray-700">Xử lý:</span>
+                                        <p class="text-green-600">Cải thiện chất lượng nước</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-400">Cập nhật: 10/11/2025</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-4 pt-3 border-t">
+                            <div class="flex items-center space-x-4 text-xs text-gray-500">
+                                <span>🌊 Kiểm tra độ mặn, pH</span>
+                            </div>
+                            <a href="#benh-stress-moi-truong" class="text-pink-600 font-medium hover:underline text-sm">Xem Hướng Dẫn →</a>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- Phân trang -->
+                <div id="disease-pagination" class="flex justify-center pt-8">
+                    <div class="flex items-center space-x-2">
+                        <button onclick="changePage(1)" class="px-4 py-2 text-sm font-medium bg-gray-600 text-white rounded-lg">1</button>
+                        <button onclick="changePage(2)" class="px-4 py-2 text-sm font-medium bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg">2</button>
+                    </div>
+                    <div class="text-center mt-4 text-sm text-gray-600">
+                        Trang <span id="current-page-info">1</span> / 2 - Tổng cộng <span id="diseases-count">8</span> bệnh
                     </div>
                 </div>
 
             </div>
         </div>
+
+        <!-- Hướng dẫn khẩn cấp -->
+        <section class="mt-12 mb-8">
+            <div class="bg-gradient-to-r from-red-50 to-pink-50 rounded-2xl p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">🚨 Hướng Dẫn Xử Lý Khẩn Cấp</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div class="bg-white rounded-lg p-6 shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <span class="text-2xl mr-2">⚡</span>
+                            Khi Phát Hiện Bệnh
+                        </h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>• <strong>Bước 1:</strong> Cách ly ngay vùng bị bệnh</li>
+                            <li>• <strong>Bước 2:</strong> Chụp ảnh, ghi chép triệu chứng</li>
+                            <li>• <strong>Bước 3:</strong> Liên hệ chuyên gia ngay lập tức</li>
+                            <li>• <strong>Bước 4:</strong> Không sử dụng thuốc tùy tiện</li>
+                            <li>• <strong>Bước 5:</strong> Theo dõi diễn biến 24/7</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-6 shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <span class="text-2xl mr-2">📞</span>
+                            Liên Hệ Hỗ Trợ 24/7
+                        </h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>• <strong>Hotline khẩn cấp:</strong> 0292.xxx.xxx</li>
+                            <li>• <strong>Zalo hỗ trợ:</strong> 09xx.xxx.xxx</li>
+                            <li>• <strong>Email:</strong> benh@thuysantv.com</li>
+                            <li>• <strong>Trạm thú y:</strong> Trà Vinh, Cầu Kè</li>
+                            <li>• <strong>Chuyên gia:</strong> TS. Nguyễn Văn A</li>
+                        </ul>
+                    </div>
+                    
+                </div>
+
+                <div class="mt-6 text-center">
+                    <div class="bg-red-100 border border-red-300 rounded-lg p-4">
+                        <p class="text-red-700 font-semibold">⚠️ LƯU Ý QUAN TRỌNG</p>
+                        <p class="text-red-600 text-sm mt-1">
+                            Không tự ý sử dụng kháng sinh hoặc hóa chất mà chưa được hướng dẫn. 
+                            Việc sử dụng sai có thể làm tình hình trở nên nghiêm trọng hơn.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
     <footer class="bg-gradient-to-r from-slate-800 to-slate-900 text-white mt-12 pt-10 pb-6">
     <div class="container mx-auto px-4">
@@ -155,7 +696,7 @@
                 <ul class="space-y-2 text-sm">
                     <li><a href="index.html" class="text-white hover:text-white transition">Trang Chủ</a></li>
                     <li><a href="tintuc.html" class="text-white hover:text-white transition">Tin Tức Cộng Đồng</a></li>
-                    <li><a href="kythuat.html" class="text-white hover:text-white transition">Thông tin Kỹ Thuật</a></li>
+                    <li><a href="kythuat-nuoi.html" class="text-white hover:text-white transition">Kỹ Thuật Nuôi Trồng</a></li>
                     <li><a href="dangtin.html" class="text-white hover:text-white transition">Đăng Bài/Chia Sẻ</a></li>
                 </ul>
             </div>
@@ -165,8 +706,8 @@
                 <ul class="space-y-2 text-sm">
                     <li><a href="kythuat-nuoi.html" class="text-white hover:text-white transition">Kỹ Thuật Nuôi Tôm/Cá</a></li>
                     <li><a href="benh-thuy-san.html" class="text-white hover:text-white transition">Phác Đồ Bệnh Thủy Sản</a></li>
-                    <li><a href="tai-lieu-thuy-san.html" class="text-white hover:text-white transition">Thư Viện Tài Liệu</a></li>
-                    <li><a href="loai-thuy-san.html" class="text-white hover:text-white transition">Danh Mục Loài</a></li>
+                    <li></li>
+                    <li></li>
                 </ul>
             </div>
 
@@ -188,5 +729,159 @@
 </footer>
 
     <script src="script.js"></script>
+    
+    <!-- Chatbot Widget -->
+    <div id="chatbot-toggle" class="fixed bottom-6 right-6 z-50">
+        <button onclick="toggleChatbot()" class="bg-teal-600 text-white p-4 rounded-full shadow-lg hover:bg-teal-700 transition duration-300 text-2xl">
+            🤖
+        </button>
+    </div>
+
+    <div id="chatbot-window" class="fixed bottom-24 right-6 w-80 bg-white rounded-lg shadow-2xl z-50 hidden">
+        <div class="bg-teal-600 text-white p-4 rounded-t-lg">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold">🤖 Trợ Lý Kỹ Thuật</h3>
+                <button onclick="toggleChatbot()" class="text-white hover:text-gray-200 text-xl">&times;</button>
+            </div>
+        </div>
+        
+        <div id="chat-messages" class="h-64 overflow-y-auto p-4 space-y-3 bg-gray-50">
+            <div class="bg-white p-3 rounded-lg shadow-sm">
+                <p class="text-sm text-gray-700">Xin chào! Tôi là trợ lý AI chuyên về bệnh thủy sản. Bạn có câu hỏi gì về bệnh tôm, cá không?</p>
+            </div>
+        </div>
+        
+        <div class="p-4 border-t bg-white rounded-b-lg">
+            <div class="flex space-x-2">
+                <input type="text" id="chat-input" placeholder="Nhập câu hỏi về bệnh..." class="flex-1 border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500" onkeypress="handleChatKeyPress(event)">
+                <button onclick="sendChatMessage()" class="bg-teal-600 text-white px-3 py-2 rounded-lg hover:bg-teal-700 text-sm font-medium">Gửi</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript cho phân trang bệnh thủy sản -->
+    <script>
+        let currentPage = 1;
+        const totalPages = 2;
+        
+        function changePage(page) {
+            if (page < 1 || page > totalPages) return;
+            
+            currentPage = page;
+            
+            // Lấy tất cả bệnh trang 1 (các article không nằm trong page-2-diseases)
+            const page1Articles = document.querySelectorAll('#diseases-container > article');
+            const page2Div = document.getElementById('page-2-diseases');
+            
+            if (page === 1) {
+                // Hiển thị bệnh trang 1
+                page1Articles.forEach(article => {
+                    article.style.display = 'block';
+                });
+                if (page2Div) page2Div.style.display = 'none';
+                
+                // Cập nhật số lượng bệnh
+                const diseasesCountEl = document.getElementById('diseases-count');
+                if (diseasesCountEl) diseasesCountEl.textContent = '8';
+                
+            } else if (page === 2) {
+                // Ẩn bệnh trang 1
+                page1Articles.forEach(article => {
+                    article.style.display = 'none';
+                });
+                // Hiển thị trang 2
+                if (page2Div) page2Div.style.display = 'block';
+                
+                // Cập nhật số lượng bệnh
+                const diseasesCountEl = document.getElementById('diseases-count');
+                if (diseasesCountEl) diseasesCountEl.textContent = '3';
+            }
+            
+            // Cập nhật nút phân trang
+            updatePaginationButtons();
+            
+            // Scroll lên đầu danh sách
+            const container = document.querySelector('#diseases-container');
+            if (container) {
+                container.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        function updatePaginationButtons() {
+            // Cập nhật trạng thái các nút
+            document.querySelectorAll('#disease-pagination button').forEach((btn, index) => {
+                btn.classList.remove('bg-gray-600', 'text-white');
+                btn.classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+                
+                // Highlight nút trang hiện tại
+                if (index + 1 === currentPage) {
+                    btn.classList.remove('bg-white', 'border-gray-300', 'text-gray-700');
+                    btn.classList.add('bg-gray-600', 'text-white');
+                }
+            });
+            
+            // Cập nhật thông tin trang
+            const currentPageInfo = document.getElementById('current-page-info');
+            if (currentPageInfo) {
+                currentPageInfo.textContent = currentPage;
+            }
+        }
+        
+        // Thêm chức năng lọc bệnh
+        function filterDiseases() {
+            const searchInput = document.querySelector('input[type="text"]');
+            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+            
+            const selectedSpeciesInput = document.querySelector('input[name="species"]:checked');
+            const selectedSpecies = selectedSpeciesInput ? selectedSpeciesInput.value : '';
+            
+            const selectedSeverities = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => {
+                if (cb.classList.contains('text-red-600')) return 'red';
+                if (cb.classList.contains('text-yellow-600')) return 'yellow';
+                if (cb.classList.contains('text-blue-600')) return 'blue';
+                return '';
+            });
+            
+            // Lọc và hiển thị kết quả
+            console.log('Đang lọc bệnh:', { searchTerm, selectedSpecies, selectedSeverities });
+            
+            // Có thể thêm logic lọc thực tế ở đây
+            alert('Chức năng lọc đang được phát triển!');
+        }
+        
+        // Hàm đặt lại bộ lọc
+        function resetFilter() {
+            // Xóa nội dung ô tìm kiếm
+            const searchInput = document.querySelector('input[type="text"]');
+            if (searchInput) searchInput.value = '';
+            
+            // Đặt lại radio button về "Tất cả"
+            const allSpeciesRadio = document.querySelector('input[name="species"][value=""]');
+            if (allSpeciesRadio) allSpeciesRadio.checked = true;
+            
+            // Bỏ chọn tất cả checkbox
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            
+            // Quay về trang 1
+            changePage(1);
+        }
+        
+        // Khởi tạo trang khi DOM đã sẵn sàng
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePaginationButtons();
+            
+            // Kiểm tra trạng thái đăng nhập
+            if (typeof checkLoginStatus === 'function') {
+                checkLoginStatus();
+            }
+        });
+        
+        // Export functions để có thể gọi từ HTML
+        window.changePage = changePage;
+        window.filterDiseases = filterDiseases;
+        window.resetFilter = resetFilter;
+    </script>
 </body>
 </html>

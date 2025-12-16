@@ -89,20 +89,44 @@ if ($authorFilter) {
 
 $sql .= " ORDER BY created_at DESC";
 
-// Giới hạn số lượng (cho trang chủ)
-if ($limit && !$postId) {
-    $sql .= " LIMIT ?";
-    $params[] = (int)$limit;
-}
-
 try {
-    // Sử dụng prepare và execute để bảo mật
+    // Đếm tổng số bài viết (cho phân trang)
+    $countSql = str_replace("SELECT id, author_username, title, content, category, created_at, status, admin_note, approved_by_admin, image_url FROM posts", "SELECT COUNT(*) FROM posts", $sql);
+    $countSql = preg_replace('/\s+LIMIT\s+\?$/i', '', $countSql); // Bỏ LIMIT khỏi count query
+    
+    $countStmt = $pdo->prepare($countSql);
+    $countStmt->execute($params);
+    $totalPosts = $countStmt->fetchColumn();
+    
+    // Tính toán phân trang
+    $page = $_GET['page'] ?? 1;
+    $limit = $_GET['limit'] ?? 9; // Mặc định 9 bài/trang cho tin tức
+    $offset = ((int)$page - 1) * (int)$limit;
+    $totalPages = ceil($totalPosts / $limit);
+    
+    // Thêm LIMIT và OFFSET cho phân trang (chỉ khi không phải single post)
+    if (!$postId) {
+        $sql .= " LIMIT ? OFFSET ?";
+        $params[] = (int)$limit;
+        $params[] = (int)$offset;
+    }
+    
+    // Lấy dữ liệu bài viết
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Bổ sung username vào kết quả trả về cho mục đích debug
-    echo json_encode(['success' => true, 'posts' => $posts, 'debug' => ['sql' => $sql, 'params' => $params]]); 
+    // Trả về kết quả với thông tin phân trang
+    echo json_encode([
+        'success' => true, 
+        'posts' => $posts,
+        'pagination' => [
+            'currentPage' => (int)$page,
+            'totalPages' => (int)$totalPages,
+            'totalPosts' => (int)$totalPosts,
+            'limit' => (int)$limit
+        ]
+    ]); 
 
 } catch (\PDOException $e) {
     http_response_code(500);

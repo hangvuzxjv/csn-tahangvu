@@ -17,12 +17,25 @@
             </div>
 
             <nav class="hidden lg:flex space-x-8 text-base font-medium">
-                <nav class="hidden lg:flex space-x-8 text-base font-medium">
-                    <a href="index.html" class="text-gray-700 hover:text-teal-600 transition">Trang Chủ</a>
-                    <a href="tintuc.html" class="text-gray-700 hover:text-teal-600 transition">Tin Tức</a>
-                    <a href="kythuat.html" class="text-gray-700 hover:text-teal-600 transition">Thông tin/Kỹ Thuật Nuôi Trồng</a>
-                    <a href="dangtin.html" class="text-gray-700 hover:text-teal-600 transition">Đăng Tin</a> 
-                </nav>
+                <a href="index.html" class="text-gray-700 hover:text-teal-600 transition">Trang Chủ</a>
+                <a href="tintuc.html" class="text-gray-700 hover:text-teal-600 transition">Tin Tức</a>
+                
+                <!-- Dropdown Menu cho Kỹ Thuật -->
+                <div class="relative group">
+                    <a href="kythuat-nuoi.html" class="text-gray-700 hover:text-teal-600 transition flex items-center">
+                        Thông tin/Kỹ Thuật Nuôi Trồng
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </a>
+                    <!-- Dropdown content -->
+                    <div class="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                        <a href="kythuat-nuoi.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition"> Kỹ Thuật Nuôi Tôm/Cá</a>
+                        <a href="benh-thuy-san.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition">  Bệnh Thủy Sản</a>
+                    </div>
+                </div>
+                
+                <a href="dangtin.html" class="text-gray-700 hover:text-teal-600 transition">Đăng Tin</a>
             </nav>
 
             <div class="flex items-center space-x-4">
@@ -54,7 +67,7 @@
             <nav class="flex flex-col space-y-2 p-4 text-sm font-medium">
                 <a href="index.html" class="text-gray-700 hover:text-teal-600 transition">Trang Chủ</a>
                 <a href="tintuc.html" class="text-gray-700 hover:text-teal-600 transition">Tin Tức</a>
-                <a href="kythuat.html" class="text-gray-700 hover:text-teal-600 transition">Thông tin/Kỹ Thuật Nuôi Trồng</a>
+                <a href="kythuat-nuoi.html" class="text-gray-700 hover:text-teal-600 transition">Kỹ Thuật Nuôi Trồng</a>
             </nav>
         </div>
     </header>
@@ -89,9 +102,83 @@
 </section>
 
         <section>
-            <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-teal-500 pb-2">Tin Nổi Bật</h2>
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-teal-500 pb-2">Tin Nổi Bật Hôm Nay</h2>
             
-            <div id="post-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Layout grid với sidebar -->
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                
+                <!-- Sidebar Trái -->
+                <div class="hidden xl:block xl:col-span-2 space-y-4">
+                    
+                    <!-- Widget Thống Kê -->
+                    <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-teal-500">
+                        <h3 class="text-sm font-bold text-gray-800 mb-3">Thống Kê</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Bài viết:</span>
+                                <span class="font-bold text-teal-600" id="total-posts">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Thành viên:</span>
+                                <span class="font-bold text-blue-600" id="total-users">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Hôm nay:</span>
+                                <span class="font-bold text-green-600" id="today-posts">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Widget Thời Tiết -->
+                    <div class="bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl shadow-lg p-4 text-white">
+                        <h3 class="text-sm font-bold mb-2"> Trà Vinh</h3>
+                        <div class="text-center">
+                            <div class="text-2xl mb-1"></div>
+                            <div class="text-lg font-bold">28°C</div>
+                            <div class="text-xs opacity-90">Phù hợp nuôi tôm</div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <!-- Nội dung chính -->
+                <div class="xl:col-span-8">
+                    <div id="post-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+                </div>
+
+                <!-- Sidebar Phải -->
+                <div class="hidden xl:block xl:col-span-2 space-y-4">
+                    
+                    <!-- Widget Bài Viết Mới -->
+                    <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-green-500">
+                        <h3 class="text-sm font-bold text-gray-800 mb-3">Mới Nhất</h3>
+                        <div id="latest-posts" class="space-y-2">
+                            <div class="text-xs text-gray-500">Đang tải...</div>
+                        </div>
+                    </div>
+
+                    <!-- Widget Liên Hệ -->
+                    <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-orange-500">
+                        <h3 class="text-sm font-bold text-gray-800 mb-3">Liên Hệ</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex items-center space-x-2">
+                                <span></span>
+                                <span class="text-gray-600">Trà Vinh</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span></span>
+                                <span class="text-gray-600">hangvuzxjv@gmail.com</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span></span>
+                                <span class="text-gray-600">0xxx.xxx.xxx</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
             </div>
         </section>
 
@@ -116,7 +203,7 @@
                 <ul class="space-y-2 text-sm">
                     <li><a href="index.html" class="text-white hover:text-white transition">Trang Chủ</a></li>
                     <li><a href="tintuc.html" class="text-white hover:text-white transition">Tin Tức Cộng Đồng</a></li>
-                    <li><a href="kythuat.html" class="text-white hover:text-white transition">Thông tin Kỹ Thuật</a></li>
+                    <li><a href="kythuat-nuoi.html" class="text-white hover:text-white transition">Kỹ Thuật Nuôi Trồng</a></li>
                     <li><a href="dangtin.html" class="text-white hover:text-white transition">Đăng Bài/Chia Sẻ</a></li>
                 </ul>
             </div>
@@ -126,8 +213,6 @@
                 <ul class="space-y-2 text-sm">
                     <li><a href="kythuat-nuoi.html" class="text-white hover:text-white transition">Kỹ Thuật Nuôi Tôm/Cá</a></li>
                     <li><a href="benh-thuy-san.html" class="text-white hover:text-white transition">Phác Đồ Bệnh Thủy Sản</a></li>
-                    <li><a href="tai-lieu-thuy-san.html" class="text-white hover:text-white transition">Thư Viện Tài Liệu</a></li>
-                    <li><a href="loai-thuy-san.html" class="text-white hover:text-white transition">Danh Mục Loài</a></li>
                 </ul>
             </div>
 
