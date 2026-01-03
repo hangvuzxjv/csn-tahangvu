@@ -13,28 +13,28 @@
 <body class="bg-gray-50">
 
     <header class="sticky top-0 z-50 bg-white shadow-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <a href="index.html" class="flex items-center space-x-3 hover:opacity-90 transition">
-                    <img src="img/logo.png" alt="Logo" class="h-10 w-10">
-                    <span class="text-2xl font-bold text-teal-600">Thủy Sản</span>
+        <div class="container mx-auto px-3 md:px-4 py-3 md:py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <a href="index.html" class="flex items-center space-x-2 md:space-x-3 hover:opacity-90 transition">
+                    <img src="img/logo.png" alt="Logo" class="h-8 w-8 md:h-10 md:w-10">
+                    <span class="text-lg md:text-2xl font-bold text-teal-600">Thủy Sản</span>
                 </a>
             </div>
 
-            <nav class="hidden lg:flex space-x-8 text-base font-medium">
+            <nav class="hidden lg:flex space-x-6 xl:space-x-8 text-sm xl:text-base font-medium">
                 <a href="index.html" class="text-gray-700 hover:text-teal-600 transition">Trang Chủ</a>
                 <a href="tintuc.html" class="text-gray-700 hover:text-teal-600 transition">Tin Tức</a>
                 
                 <div class="relative group">
                     <a href="kythuat-nuoi.html" class="text-gray-700 hover:text-teal-600 transition flex items-center">
-                        Thông tin/Kỹ Thuật Nuôi Trồng
+                        Thông tin/Kỹ Thuật
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </a>
-                    <div class="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <div class="absolute left-0 mt-2 w-56 xl:w-64 bg-white rounded-lg shadow-xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                         <a href="kythuat-nuoi.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition">Kỹ Thuật Nuôi Tôm/Cá</a>
-                        <a href="benh-thuy-san.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition"> Bệnh Thủy Sản</a>
+                        <a href="benh-thuy-san.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition">Bệnh Thủy Sản</a>
                         <a href="gia-thuy-san.html" class="block px-4 py-2 text-sm text-teal-600 bg-teal-50 font-semibold transition">Giá Thủy Sản</a>
                     </div>
                 </div>
@@ -42,37 +42,33 @@
                 <a href="dangtin.html" class="text-gray-700 hover:text-teal-600 transition">Đăng Tin</a>
             </nav>
 
-            <div class="flex items-center space-x-4">
-                <div class="relative hidden sm:block">
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <div class="relative hidden md:block">
                     <input type="text" id="search-input" placeholder="Tìm kiếm... (Enter)" 
                            onkeypress="if(event.key==='Enter') performSearch()" 
-                           class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm w-64 bg-white hover:border-teal-400 transition shadow-sm">
+                           class="px-3 py-2 md:px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm w-40 lg:w-64 bg-white hover:border-teal-400 transition shadow-sm">
                 </div>
                 
                 <div id="auth-buttons">
-                    <a href="dangnhap.html" class="text-sm font-medium text-gray-700 hover:text-teal-600 transition">Đăng Nhập</a>
-                    <a href="dangky.html" class="ml-2 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-full hover:bg-teal-700 transition">Đăng Ký</a>
+                    <a href="dangnhap.html" class="text-xs md:text-sm font-medium text-gray-700 hover:text-teal-600 transition">Đăng Nhập</a>
+                    <a href="dangky.html" class="ml-2 px-3 py-1.5 md:px-4 md:py-2 bg-teal-600 text-white text-xs md:text-sm font-medium rounded-full hover:bg-teal-700 transition">Đăng Ký</a>
                 </div>
 
                 <div id="user-menu" class="hidden relative">
                     <button onclick="toggleUserMenu()" class="flex items-center space-x-2 text-gray-700 hover:text-teal-600 transition">
-                        <div id="user-avatar" class="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-white text-sm font-medium"></div>
-                        <span id="user-name" class="text-sm font-medium"></span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div id="user-avatar" class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-teal-600 flex items-center justify-center text-white text-xs md:text-sm font-medium"></div>
+                        <span id="user-name" class="hidden md:block text-sm font-medium"></span>
+                        <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-50 hidden">
+                    <div id="user-dropdown" class="absolute right-0 mt-2 w-40 md:w-48 bg-white rounded-lg shadow-xl py-2 z-50 hidden">
                         <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition">Hồ Sơ</a>
                         <a href="#" onclick="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition">Đăng Xuất</a>
                     </div>
                 </div>
 
-                <button class="lg:hidden text-gray-700 hover:text-teal-600 transition" onclick="toggleMobileMenu()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
+                <button id="mobile-menu-toggle" class="lg:hidden text-gray-700 hover:text-teal-600 text-xl p-2 rounded-lg hover:bg-gray-100 transition">☰</button>
             </div>
         </div>
 
@@ -88,19 +84,19 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-3 md:px-4 py-4 md:py-8">
         <!-- Page Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">Giá Thủy Sản Trà Vinh</h1>
-            <p class="text-gray-600">Theo dõi giá cả thủy sản cập nhật hàng ngày</p>
+        <div class="text-center mb-6 md:mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Giá Thủy Sản Trà Vinh</h1>
+            <p class="text-sm md:text-base text-gray-600">Theo dõi giá cả thủy sản cập nhật hàng ngày</p>
         </div>
         <!-- Filter Section -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6 mb-6 md:mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Loài thủy sản</label>
                     <select id="species-filter" onchange="loadPriceData()" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                            class="w-full px-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                         <option value="Tôm Thẻ">Tôm Thẻ</option>
                         <option value="Cá Tra">Cá Tra</option>
                         <option value="Cá Basa">Cá Basa</option>
@@ -111,7 +107,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Thời gian</label>
                     <select id="period-filter" onchange="loadPriceData()" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                            class="w-full px-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                         <option value="7">7 ngày qua</option>
                         <option value="30" selected>30 ngày qua</option>
                         <option value="90">3 tháng qua</option>
@@ -119,7 +115,7 @@
                 </div>
                 <div class="flex items-end">
                     <button onclick="loadPriceData()" 
-                            class="w-full px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium">
+                            class="w-full px-4 py-2 bg-teal-600 text-white text-sm md:text-base rounded-lg hover:bg-teal-700 transition font-medium">
                         Cập nhật
                     </button>
                 </div>
@@ -127,31 +123,31 @@
         </div>
 
         <!-- Price Chart -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Biểu đồ giá</h2>
-            <div class="relative h-96" id="chart-container">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6 mb-8">
+            <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-4">Biểu đồ giá</h2>
+            <div class="relative h-64 md:h-96" id="chart-container">
                 <canvas id="priceChart"></canvas>
                 <div id="chart-fallback" class="hidden flex items-center justify-center h-full text-gray-500">
                     <div class="text-center">
-                        <p class="text-lg mb-2">Biểu đồ đang được tải...</p>
-                        <p class="text-sm">Nếu không hiển thị, vui lòng kiểm tra kết nối mạng</p>
+                        <p class="text-base md:text-lg mb-2">Biểu đồ đang được tải...</p>
+                        <p class="text-xs md:text-sm">Nếu không hiển thị, vui lòng kiểm tra kết nối mạng</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Current Prices Table -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Giá hiện tại</h2>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6 mb-8">
+            <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-4">Giá hiện tại</h2>
             <div class="overflow-x-auto">
-                <table class="w-full">
+                <table class="w-full text-sm md:text-base">
                     <thead>
                         <tr class="border-b border-gray-200">
-                            <th class="text-left py-3 px-4 font-medium text-gray-700">Loài</th>
-                            <th class="text-left py-3 px-4 font-medium text-gray-700">Giá (VNĐ/kg)</th>
-                            <th class="text-left py-3 px-4 font-medium text-gray-700">Khu vực</th>
-                            <th class="text-left py-3 px-4 font-medium text-gray-700">Cập nhật</th>
-                            <th class="text-left py-3 px-4 font-medium text-gray-700">Xu hướng</th>
+                            <th class="text-left py-2 md:py-3 px-2 md:px-4 font-medium text-gray-700">Loài</th>
+                            <th class="text-left py-2 md:py-3 px-2 md:px-4 font-medium text-gray-700">Giá (VNĐ/kg)</th>
+                            <th class="text-left py-2 md:py-3 px-2 md:px-4 font-medium text-gray-700">Khu vực</th>
+                            <th class="text-left py-2 md:py-3 px-2 md:px-4 font-medium text-gray-700">Cập nhật</th>
+                            <th class="text-left py-2 md:py-3 px-2 md:px-4 font-medium text-gray-700">Xu hướng</th>
                         </tr>
                     </thead>
                     <tbody id="price-table-body">
@@ -162,36 +158,36 @@
         </div>
 
         <!-- Price Statistics -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Giá cao nhất</h3>
-                <p id="highest-price" class="text-2xl font-bold text-gray-900">-</p>
-                <p class="text-sm text-gray-600 mt-1">Trong 30 ngày qua</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-2">Giá cao nhất</h3>
+                <p id="highest-price" class="text-xl md:text-2xl font-bold text-gray-900">-</p>
+                <p class="text-xs md:text-sm text-gray-600 mt-1">Trong 30 ngày qua</p>
             </div>
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Giá thấp nhất</h3>
-                <p id="lowest-price" class="text-2xl font-bold text-gray-900">-</p>
-                <p class="text-sm text-gray-600 mt-1">Trong 30 ngày qua</p>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-2">Giá thấp nhất</h3>
+                <p id="lowest-price" class="text-xl md:text-2xl font-bold text-gray-900">-</p>
+                <p class="text-xs md:text-sm text-gray-600 mt-1">Trong 30 ngày qua</p>
             </div>
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Giá trung bình</h3>
-                <p id="average-price" class="text-2xl font-bold text-gray-900">-</p>
-                <p class="text-sm text-gray-600 mt-1">Trong 30 ngày qua</p>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-2">Giá trung bình</h3>
+                <p id="average-price" class="text-xl md:text-2xl font-bold text-gray-900">-</p>
+                <p class="text-xs md:text-sm text-gray-600 mt-1">Trong 30 ngày qua</p>
             </div>
         </div>
 
         <!-- Market News -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Tin tức thị trường</h2>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
+            <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-4">Tin tức thị trường</h2>
             <div class="space-y-4">
                 <div class="border-l-4 border-teal-500 pl-4">
-                    <h3 class="font-medium text-gray-800">Giá tôm thẻ tăng mạnh do nhu cầu xuất khẩu</h3>
-                    <p class="text-sm text-gray-600 mt-1">Giá tôm thẻ tại Trà Vinh đã tăng 15% trong tuần qua do đơn hàng xuất khẩu tăng cao...</p>
+                    <h3 class="font-medium text-gray-800 text-sm md:text-base">Giá tôm thẻ tăng mạnh do nhu cầu xuất khẩu</h3>
+                    <p class="text-xs md:text-sm text-gray-600 mt-1">Giá tôm thẻ tại Trà Vinh đã tăng 15% trong tuần qua do đơn hàng xuất khẩu tăng cao...</p>
                     <p class="text-xs text-gray-500 mt-2">2 ngày trước</p>
                 </div>
                 <div class="border-l-4 border-gray-300 pl-4">
-                    <h3 class="font-medium text-gray-800">Thời tiết thuận lợi cho nuôi cá tra</h3>
-                    <p class="text-sm text-gray-600 mt-1">Điều kiện thời tiết ổn định giúp năng suất nuôi cá tra tăng, dự kiến giá sẽ ổn định...</p>
+                    <h3 class="font-medium text-gray-800 text-sm md:text-base">Thời tiết thuận lợi cho nuôi cá tra</h3>
+                    <p class="text-xs md:text-sm text-gray-600 mt-1">Điều kiện thời tiết ổn định giúp năng suất nuôi cá tra tăng, dự kiến giá sẽ ổn định...</p>
                     <p class="text-xs text-gray-500 mt-2">5 ngày trước</p>
                 </div>
             </div>
@@ -241,32 +237,32 @@
     </footer>
 
     <!-- Chatbot -->
-    <div id="chatbot-container" class="fixed bottom-6 right-6 z-50">
+    <div id="chatbot-container" class="fixed bottom-4 md:bottom-6 right-4 md:right-6 z-50">
         <button id="chatbot-toggle" onclick="toggleChatbot()" 
-                class="bg-teal-600 hover:bg-teal-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 transform hover:scale-105">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="bg-teal-600 hover:bg-teal-700 text-white rounded-full p-3 md:p-4 shadow-lg transition-all duration-300 transform hover:scale-105">
+            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
             </svg>
         </button>
         
-        <div id="chatbot-window" class="hidden absolute bottom-16 right-0 w-80 bg-white rounded-lg shadow-xl border border-gray-200">
-            <div class="bg-teal-600 text-white p-4 rounded-t-lg">
-                <h3 class="font-semibold">Hỗ trợ giá thủy sản</h3>
-                <p class="text-sm opacity-90">Hỏi về giá cả và thị trường</p>
+        <div id="chatbot-window" class="hidden absolute bottom-14 md:bottom-16 right-0 w-80 md:w-80 bg-white rounded-lg shadow-xl border border-gray-200">
+            <div class="bg-teal-600 text-white p-3 md:p-4 rounded-t-lg">
+                <h3 class="font-semibold text-sm md:text-base">Hỗ trợ giá thủy sản</h3>
+                <p class="text-xs md:text-sm opacity-90">Hỏi về giá cả và thị trường</p>
             </div>
-            <div id="chat-messages" class="h-64 overflow-y-auto p-4 space-y-3">
-                <div class="bg-gray-100 rounded-lg p-3 text-sm">
+            <div id="chat-messages" class="h-48 md:h-64 overflow-y-auto p-3 md:p-4 space-y-3">
+                <div class="bg-gray-100 rounded-lg p-2 md:p-3 text-xs md:text-sm">
                     Xin chào! Tôi có thể giúp bạn tìm hiểu về giá thủy sản và xu hướng thị trường. Bạn muốn biết gì?
                 </div>
             </div>
-            <div class="p-4 border-t">
+            <div class="p-3 md:p-4 border-t">
                 <div class="flex space-x-2">
                     <input type="text" id="chat-input" placeholder="Nhập câu hỏi..." 
                            onkeypress="if(event.key==='Enter') sendChatMessage()"
-                           class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm">
+                           class="flex-1 px-2 md:px-3 py-1.5 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-xs md:text-sm">
                     <button onclick="sendChatMessage()" 
-                            class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="px-3 md:px-4 py-1.5 md:py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition">
+                        <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                         </svg>
                     </button>
@@ -289,16 +285,39 @@
         // Load price data from API
         async function loadPriceData() {
             console.log('Loading price data...');
-            const species = document.getElementById('species-filter').value;
-            const days = document.getElementById('period-filter').value;
+            
+            const speciesSelect = document.getElementById('species-filter');
+            const periodSelect = document.getElementById('period-filter');
+            
+            if (!speciesSelect || !periodSelect) {
+                console.error('Filter elements not found');
+                showErrorMessage();
+                return;
+            }
+            
+            const species = speciesSelect.value;
+            const days = periodSelect.value;
+            
+            // Show loading state
+            showLoadingState();
             
             try {
-                const response = await fetch(`db.php/get_price_chart.php?species=${encodeURIComponent(species)}&days=${days}`);
-                const result = await response.json();
+                const url = window.apiUrl ? 
+                    apiUrl(`db.php/get_price_chart.php?species=${encodeURIComponent(species)}&days=${days}`) :
+                    `/Project/db.php/get_price_chart.php?species=${encodeURIComponent(species)}&days=${days}`;
                 
+                console.log('Fetching from URL:', url);
+                
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
                 console.log('Price data result:', result);
                 
-                if (result.success && result.data.length > 0) {
+                if (result.success && result.data && result.data.length > 0) {
                     updateChart(result.data);
                     updatePriceTable(result.data);
                     updateStatistics(result.data);
@@ -310,6 +329,45 @@
                 console.error('Error loading price data:', error);
                 showErrorMessage();
             }
+        }
+        
+        // Show loading state
+        function showLoadingState() {
+            const tbody = document.getElementById('price-table-body');
+            if (tbody) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-gray-500">
+                            <div class="flex flex-col items-center">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600 mb-4"></div>
+                                <p class="text-sm">Đang tải dữ liệu giá...</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            // Show chart loading
+            const fallback = document.getElementById('chart-fallback');
+            if (fallback) {
+                fallback.classList.remove('hidden');
+                fallback.innerHTML = `
+                    <div class="text-center">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
+                        <p class="text-lg mb-2">Đang tải biểu đồ...</p>
+                        <p class="text-sm text-gray-500">Vui lòng đợi trong giây lát</p>
+                    </div>
+                `;
+            }
+            
+            // Reset statistics with loading
+            const elements = ['highest-price', 'lowest-price', 'average-price'];
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.innerHTML = '<div class="animate-pulse bg-gray-200 h-6 w-20 rounded"></div>';
+                }
+            });
         }
 
         // Update price chart
@@ -323,10 +381,21 @@
                 return;
             }
             
-            const ctx = document.getElementById('priceChart').getContext('2d');
+            const chartCanvas = document.getElementById('priceChart');
+            if (!chartCanvas) {
+                console.error('Chart canvas not found');
+                return;
+            }
+            
+            const ctx = chartCanvas.getContext('2d');
             
             if (priceChart) {
                 priceChart.destroy();
+            }
+            
+            if (!data || data.length === 0) {
+                showChartFallback();
+                return;
             }
             
             const labels = data.map(item => {
@@ -379,7 +448,10 @@
                 });
                 
                 // Hide fallback if chart loads successfully
-                document.getElementById('chart-fallback').classList.add('hidden');
+                const fallback = document.getElementById('chart-fallback');
+                if (fallback) {
+                    fallback.classList.add('hidden');
+                }
             } catch (error) {
                 console.error('Error creating chart:', error);
                 showChartFallback();
@@ -395,7 +467,23 @@
         function updatePriceTable(data) {
             console.log('Updating price table with data:', data);
             const tbody = document.getElementById('price-table-body');
+            if (!tbody) {
+                console.error('Price table body not found');
+                return;
+            }
+            
             tbody.innerHTML = '';
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-6 text-center text-gray-500 text-sm">
+                            Không có dữ liệu giá cho loài này trong khoảng thời gian đã chọn
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
             
             // Group by species and get latest price for each
             const latestPrices = {};
@@ -414,11 +502,11 @@
                 const trendColor = trend > 0 ? 'text-green-600' : trend < 0 ? 'text-red-600' : 'text-gray-600';
                 
                 row.innerHTML = `
-                    <td class="py-3 px-4 font-medium text-gray-800">${item.species}</td>
-                    <td class="py-3 px-4 text-gray-700">${new Intl.NumberFormat('vi-VN').format(item.price)} đ</td>
-                    <td class="py-3 px-4 text-gray-600">${item.location}</td>
-                    <td class="py-3 px-4 text-gray-600">${new Date(item.recorded_at).toLocaleDateString('vi-VN')}</td>
-                    <td class="py-3 px-4 ${trendColor}">${trendIcon}</td>
+                    <td class="py-2 md:py-3 px-2 md:px-4 font-medium text-gray-800 text-sm md:text-base">${item.species}</td>
+                    <td class="py-2 md:py-3 px-2 md:px-4 text-gray-700 text-sm md:text-base font-semibold">${new Intl.NumberFormat('vi-VN').format(item.price)} đ</td>
+                    <td class="py-2 md:py-3 px-2 md:px-4 text-gray-600 text-xs md:text-sm">${item.location}</td>
+                    <td class="py-2 md:py-3 px-2 md:px-4 text-gray-600 text-xs md:text-sm">${new Date(item.recorded_at).toLocaleDateString('vi-VN')}</td>
+                    <td class="py-2 md:py-3 px-2 md:px-4 ${trendColor} text-sm md:text-base">${trendIcon}</td>
                 `;
                 
                 tbody.appendChild(row);
@@ -454,29 +542,106 @@
         // Show no data message
         function showNoDataMessage() {
             console.log('Showing no data message');
-            document.getElementById('price-table-body').innerHTML = `
-                <tr>
-                    <td colspan="5" class="py-8 text-center text-gray-500">
-                        Không có dữ liệu giá cho loài này trong khoảng thời gian đã chọn
-                    </td>
-                </tr>
-            `;
+            const tbody = document.getElementById('price-table-body');
+            if (tbody) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-gray-500">
+                            <div class="flex flex-col items-center">
+                                <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                <p class="text-base font-medium mb-2">Không có dữ liệu</p>
+                                <p class="text-sm">Không có dữ liệu giá cho loài này trong khoảng thời gian đã chọn</p>
+                                <button onclick="loadPriceData()" class="mt-4 px-4 py-2 bg-teal-600 text-white text-sm rounded-lg hover:bg-teal-700 transition">
+                                    Thử lại
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
             
             // Hide chart if no data
-            const chartContainer = document.getElementById('priceChart').parentElement.parentElement;
-            chartContainer.style.display = 'none';
+            const chartContainer = document.getElementById('chart-container');
+            if (chartContainer) {
+                const fallback = document.getElementById('chart-fallback');
+                if (fallback) {
+                    fallback.classList.remove('hidden');
+                    fallback.innerHTML = `
+                        <div class="text-center">
+                            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            <p class="text-lg mb-2">Không có dữ liệu biểu đồ</p>
+                            <p class="text-sm text-gray-500">Chọn loài khác hoặc thời gian khác để xem biểu đồ</p>
+                        </div>
+                    `;
+                }
+                const canvas = document.getElementById('priceChart');
+                if (canvas) {
+                    canvas.style.display = 'none';
+                }
+            }
+            
+            // Reset statistics
+            resetStatistics();
         }
 
         // Show error message
         function showErrorMessage() {
             console.log('Showing error message');
-            document.getElementById('price-table-body').innerHTML = `
-                <tr>
-                    <td colspan="5" class="py-8 text-center text-red-500">
-                        Có lỗi xảy ra khi tải dữ liệu. Vui lòng thử lại sau.
-                    </td>
-                </tr>
-            `;
+            const tbody = document.getElementById('price-table-body');
+            if (tbody) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-red-500">
+                            <div class="flex flex-col items-center">
+                                <svg class="w-12 h-12 text-red-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <p class="text-base font-medium mb-2">Có lỗi xảy ra</p>
+                                <p class="text-sm">Không thể tải dữ liệu giá. Vui lòng thử lại sau.</p>
+                                <button onclick="loadPriceData()" class="mt-4 px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition">
+                                    Thử lại
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            // Show chart error
+            const fallback = document.getElementById('chart-fallback');
+            if (fallback) {
+                fallback.classList.remove('hidden');
+                fallback.innerHTML = `
+                    <div class="text-center">
+                        <svg class="w-16 h-16 text-red-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-lg mb-2 text-red-600">Lỗi tải biểu đồ</p>
+                        <p class="text-sm text-gray-500">Vui lòng kiểm tra kết nối mạng và thử lại</p>
+                        <button onclick="loadPriceData()" class="mt-4 px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition">
+                            Thử lại
+                        </button>
+                    </div>
+                `;
+            }
+            
+            // Reset statistics
+            resetStatistics();
+        }
+        
+        // Reset statistics
+        function resetStatistics() {
+            const elements = ['highest-price', 'lowest-price', 'average-price'];
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = '-';
+                }
+            });
         }
         // Chatbot functions
         function toggleChatbot() {
@@ -485,7 +650,6 @@
         }
 
         // Chatbot functions đã được định nghĩa trong assets/js/script.js
-        }
     </script>
 </body>
 </html>

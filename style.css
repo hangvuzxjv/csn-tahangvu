@@ -50,6 +50,24 @@
     input, textarea, select {
         font-size: 16px; /* Prevent zoom on iOS */
     }
+    
+    /* Price page specific optimizations */
+    .price-chart-container {
+        height: 250px !important;
+    }
+    
+    .price-stats-grid {
+        gap: 0.75rem !important;
+    }
+    
+    .price-table {
+        font-size: 0.75rem !important;
+    }
+    
+    .price-table th,
+    .price-table td {
+        padding: 0.5rem 0.25rem !important;
+    }
 }
 
 /* Chatbot mobile optimization */
